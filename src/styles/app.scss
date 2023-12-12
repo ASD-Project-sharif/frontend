@@ -110,9 +110,11 @@ body {
 .nav-item {
     display: flex;
     gap: 30px;
+    align-items: center;
+    font-size: 18px;
 
     a {
-        color: white;
+        color: black;
     }
 
     a:hover {
@@ -239,4 +241,18 @@ body {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+}
+
+.login-form {
+    height: calc(100vh - 75px);
+}
+
+.card {
+    border-radius: 2ox;
+    background: #e6e8eb !important;
+    border: 0px;
+}
+
+.text-center {
+    text-align: center;
 }

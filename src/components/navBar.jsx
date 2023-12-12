@@ -16,9 +16,12 @@ const NavBar = () => {
             <Col span={6}></Col>
             <Col span={12} className="nav-item">
                 <Link to="/">
-                    {/* <img className="logo" src={logo} width={50} height={50} alt="logo" /> */}
                     تیکت آنلاین
+                    {/* <img className="logo" src={logo} width={100} height={100} alt="logo" /> */}
                 </Link>
+                {/* <div>
+                    تماس با ما
+                </div> */}
             </Col>
             <Col span={6}>
                 <Button type="primary" onClick={clickButton}>
