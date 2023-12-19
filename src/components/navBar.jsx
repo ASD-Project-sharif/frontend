@@ -1,14 +1,30 @@
 import { Row, Col, Button } from "antd";
-import logo from "../assets/logo.svg";
+import { useContext } from "react";
+// import logo from "../assets/logo.svg";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../App";
 
 const NavBar = () => {
     let navigate = useNavigate();
+    const { state, dispatch } = useContext(AuthContext);
 
     const clickButton = () => {
-        navigate("/login");
+        if (state.isAuthenticated) {
+            navigate("/user");
+        } else {
+            navigate("/login");
+        }
     };
+
+    const logout = () => {
+        if (state.isAuthenticated) {
+            dispatch({
+                type: "LOGOUT",
+            });
+            navigate("/login")
+        }
+    }
 
     return (
 
@@ -25,8 +41,13 @@ const NavBar = () => {
             </Col>
             <Col span={6}>
                 <Button type="primary" onClick={clickButton}>
-                    ورود
+                    {state.isAuthenticated ? "صفحه کاربری" : "ورود"}
                 </Button>
+                {state.isAuthenticated ? (
+                    <Button type="primary" onClick={logout} className="logout-button">
+                        خروج
+                    </Button>
+                ) : ""}
             </Col>
         </Row>
     )

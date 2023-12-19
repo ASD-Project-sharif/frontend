@@ -1,21 +1,52 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Form, Input, Button, Row, Col, Card, message } from "antd";
 import NavBar from "../components/navBar";
+import axios from "axios";
+import config from "../config/config";
+import { useContext } from "react";
+import { AuthContext } from "../App";
 
 const LoginPage = () => {
     const [searchParams] = useSearchParams();
+    const [messageApi, contextHolder] = message.useMessage();
+    const { dispatch } = useContext(AuthContext);
 
     const registerSuccess = searchParams.get("registerSuccess");
     const resetPasswordSuccess = searchParams.get("resetPasswordSuccess");
 
     let navigate = useNavigate();
 
-    const submitForm = () => {
-        return 0;
+    const errorMessage = () => {
+        messageApi.open({
+            type: "error",
+            content: "نام کاربری یا کلمه عبور شما اشتباه است!",
+        });
+    };
+
+
+    const submitForm = async (values) => {
+        try {
+            const response = await axios.post(
+                `${config.baseUrl}/api/auth/signin/`,
+                values
+            );
+            dispatch({
+                type: "LOGIN",
+                payload: {
+                    token: response.data.token,
+                    role: response.data.role,
+                    user: values["username"],
+                },
+            });
+            navigate("/user");
+        } catch (error) {
+            errorMessage();
+        }
     }
 
     return (
         <div>
+            {contextHolder}
             <div>
                 <div className="site-header-bg"></div>
                 <NavBar />
@@ -53,7 +84,7 @@ const LoginPage = () => {
                                     { required: true, message: "لطفا کلمه عبور را وارد کنید" },
                                 ]}
                             >
-                                <Input size="large" type="password" placeholder="کلمه عبور" />
+                                <Input.Password size="large" type="password" placeholder="کلمه عبور" />
                             </Form.Item>
                             <Form.Item>
                                 <Button size="large" block type="primary" htmlType="submit">
@@ -61,9 +92,6 @@ const LoginPage = () => {
                                 </Button>
                             </Form.Item>
                         </Form>
-                        {/* <Button className="mr-auto ml-auto" type="link" onClick={() => navigate("/forgot-password")} block>
-                            رمز عبور خود را فراموش کرده اید؟
-                        </Button> */}
                     </Card>
                     <div className="text-center" style={{ margin: "20px 0px" }}>
                         <h3>

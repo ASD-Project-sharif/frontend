@@ -2,12 +2,19 @@ import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/navBar";
 import header from "../assets/bg.jpg";
+import { useContext } from "react";
+import { AuthContext } from "../App";
 
 const MainPage = () => {
     let navigate = useNavigate();
+    const { state } = useContext(AuthContext);
 
     const clickButton = () => {
-        navigate("/login");
+        if (state.isAuthenticated) {
+            navigate("/user");
+        } else {
+            navigate("/login");
+        }
     };
 
     return (
