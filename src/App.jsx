@@ -1,10 +1,10 @@
 import './App.css'
 import { Navigate, Route, Routes } from "react-router-dom";
-import MainPage from './pages/mainPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import { createContext, useReducer } from 'react';
 import UserPage from './pages/UserPage';
+import MainPage from './pages/MainPage';
 
 (async function () {
   // we need less for antd global less variable and them customization.
