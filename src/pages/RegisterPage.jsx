@@ -6,6 +6,7 @@ import axios from "axios";
 import config from "../config/config";
 import { useNavigate } from "react-router-dom";
 
+
 const RegisterPage = () => {
   const [value, setValue] = useState('user');
   const navigate = useNavigate();
