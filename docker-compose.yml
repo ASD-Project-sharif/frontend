@@ -4,5 +4,7 @@ services:
     restart: unless-stopped
     image: ${IMAGE}:${TAG}
     container_name: asd-project-front-app
+    environment:
+      baseUrl: ${BASE_URL}
     ports:
       - "${SERVICE_PORT}:${SERVICE_PORT}"
