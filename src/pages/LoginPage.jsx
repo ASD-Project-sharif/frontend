@@ -5,6 +5,7 @@ import axios from "axios";
 import config from "../config/config";
 import { useContext } from "react";
 import { AuthContext } from "../App";
+import process from "../../.eslintrc.cjs";
 
 const LoginPage = () => {
     const [searchParams] = useSearchParams();
@@ -27,7 +28,7 @@ const LoginPage = () => {
     const submitForm = async (values) => {
         try {
             const response = await axios.post(
-                `${config.baseUrl}/api/auth/signin/`,
+                `${process.env.baseUrl}/api/auth/signin/`,
                 values
             );
             dispatch({
