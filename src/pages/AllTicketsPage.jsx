@@ -36,6 +36,7 @@ const AllTicketsPage = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+
     const tickets = [{
         "user": "ali",
         "message": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
