@@ -19,7 +19,7 @@ const RegisterPage = () => {
     setLoading(true);
     try {
       await axios.post(
-        `${process.env.baseUrl}/api/auth/signup`,
+        `${process.env.baseUrl}/api/v1/auth/signup`,
         {
           ...values,
           role: "user",

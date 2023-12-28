@@ -28,7 +28,7 @@ const LoginPage = () => {
     const submitForm = async (values) => {
         try {
             const response = await axios.post(
-                `${process.env.baseUrl}/api/auth/signin/`,
+                `${process.env.baseUrl}/api/v1/auth/signin/`,
                 values
             );
             dispatch({
