@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage';
 import { createContext, useReducer } from 'react';
 import UserPage from './pages/UserPage';
 import MainPage from './pages/MainPage';
+import AllTicketsPage from './pages/AllTicketsPage';
 
 
 (async function () {
@@ -74,7 +75,9 @@ function App() {
                 <Navigate replace to="/login" />
               )
             }
-          />
+          >
+            <Route index element={<AllTicketsPage />} />
+          </Route>
           <Route path="/" element={<MainPage />} />
         </Routes>
       </AuthContext.Provider>
