@@ -6,6 +6,7 @@ import { createContext, useReducer } from 'react';
 import UserPage from './pages/UserPage';
 import MainPage from './pages/MainPage';
 import AllTicketsPage from './pages/AllTicketsPage';
+import TicketRegister from './pages/TicketRegister';
 
 
 (async function () {
@@ -64,6 +65,7 @@ function App() {
         }}
       >
         <Routes>
+          <Route path="/support/:organizationName" element={<TicketRegister />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route
