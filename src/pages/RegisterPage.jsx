@@ -5,7 +5,6 @@ import { UploadOutlined } from '@ant-design/icons';
 import axios from "axios";
 import config from "../config/config";
 import { useNavigate } from "react-router-dom";
-import process from "../../.eslintrc.cjs";
 
 
 const RegisterPage = () => {
@@ -19,7 +18,7 @@ const RegisterPage = () => {
     setLoading(true);
     try {
       await axios.post(
-        `${process.env.baseUrl}/api/v1/auth/signup`,
+        `${config.baseUrl}/api/v1/auth/signup/user`,
         {
           ...values,
           role: "user",
