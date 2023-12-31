@@ -3,13 +3,18 @@ import { Form, Input, Button, Row, Col, Card, message } from "antd";
 import NavBar from "../components/navBar";
 import axios from "axios";
 import config from "../config/config";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../App";
 
 const LoginPage = () => {
     const [searchParams] = useSearchParams();
     const [messageApi, contextHolder] = message.useMessage();
-    const { dispatch } = useContext(AuthContext);
+    const { state, dispatch } = useContext(AuthContext);
+    useEffect(() => {
+        if (state.isAuthenticated) {
+            navigate("/user")
+        }
+    });
 
     const registerSuccess = searchParams.get("registerSuccess");
     const resetPasswordSuccess = searchParams.get("resetPasswordSuccess");
