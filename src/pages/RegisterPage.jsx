@@ -1,10 +1,10 @@
-import { Button, Card, Col, Form, Input, Row, Segmented, Upload, message } from "antd";
+import { Button, Card, Col, Form, Input, Row, Segmented, message } from "antd";
 import { useState } from "react";
 import NavBar from "../components/navBar";
-import { UploadOutlined } from '@ant-design/icons';
 import axios from "axios";
 import config from "../config/config";
 import { useNavigate } from "react-router-dom";
+import OrganizationRegisterForm from "../components/OrganizationRegisterForm";
 
 
 const RegisterPage = () => {
@@ -21,7 +21,7 @@ const RegisterPage = () => {
         `${config.baseUrl}/api/v1/auth/signup/user`,
         {
           ...values,
-          role: "user",
+          role: "admin",
         }
       );
       setLoading(false);
@@ -33,6 +33,7 @@ const RegisterPage = () => {
   }
 
   const errorMessage = (error) => {
+    console.log(error)
     const data = error.response.data
     const fields = []
     Object.keys(data).forEach((field) => {
@@ -44,15 +45,9 @@ const RegisterPage = () => {
     form.setFields(fields)
     messageApi.open({
       type: "error",
-      content: "ثبت‌نام شما موفق نبود. جزئیات بیشتر در پایین آمده است.",
+      content: error.response.data.message,
     });
   }
-
-
-  const submitOrganizationForm = () => {
-
-  }
-
   const userForm = (
     <Form name="auth" onFinish={submitUserForm} form={form}>
       <Form.Item
@@ -109,88 +104,6 @@ const RegisterPage = () => {
     </Form>
   )
 
-  const organizationForm = (
-    <Form name="auth" onFinish={submitOrganizationForm}>
-      <Form.Item
-        name="organizationName"
-        rules={[
-          { required: true, message: "لطفا نام سازمان را وارد کنید." },
-        ]}
-      >
-        <Input size="large" placeholder="نام سازمان" />
-      </Form.Item>
-      <Form.Item
-        name="adminUsername"
-        rules={[
-          { required: true, message: "لطفا نام کاربری ادمین را وارد کنید." },
-        ]}
-      >
-        <Input size="large" placeholder="نام کاربری ادمین" />
-      </Form.Item>
-      <Form.Item
-        name="password"
-        rules={[
-          { required: true, message: "لطفا کلمه عبور را وارد کنید." },
-        ]}
-      >
-        <Input.Password size="large" placeholder="کلمه عبور" />
-      </Form.Item>
-      <Form.Item
-        name="confirm"
-        dependencies={['password']}
-        hasFeedback
-        rules={[
-          {
-            required: true,
-            message: 'تکرار کلمه عبور را وارد کنید!',
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('تکرار کلمه عبور با خود آن یکسان نیست.'));
-            },
-          }),
-        ]}
-      >
-        <Input.Password size="large" placeholder="تکرار کلمه عبور" />
-      </Form.Item>
-      <Form.Item
-        name="organizationEmail"
-        rules={[
-          { required: true, message: "لطفا ایمیل را وارد کنید." },
-          { type: "email", message: "فرمت ایمیل درست نیست." }
-        ]}
-      >
-        <Input size="large" placeholder="ایمیل سازمانی" />
-      </Form.Item>
-      <Form.Item
-        name="description"
-        rules={[
-          { required: true, message: "لطفا ایمیل را وارد کنید." },
-        ]}
-      >
-        <Input.TextArea size="large" placeholder="معرفی سازمان" rows={4} />
-      </Form.Item>
-      <Form.Item
-        name="organizationLogo"
-        label="لوگوی سازمان"
-        rules={[
-          { required: true, message: "لطفا لوگو سازمان را وارد کنید." },
-        ]}
-      >
-        <Upload>
-          <Button icon={<UploadOutlined />}>Click to Upload</Button>
-        </Upload>
-      </Form.Item>
-      <Form.Item>
-        <Button size="large" block type="primary" htmlType="submit" loading={loading}>
-          ثبت نام
-        </Button>
-      </Form.Item>
-    </Form>
-  )
   return (
     <div>
       {contextHolder}
@@ -215,9 +128,7 @@ const RegisterPage = () => {
               block
               style={{ marginBottom: "30px" }}
             />
-            {value === "user" ? userForm : organizationForm}
-
-
+            {value === "user" ? userForm : <OrganizationRegisterForm />}
           </Card>
 
         </Col>

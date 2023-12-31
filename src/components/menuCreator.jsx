@@ -1,25 +1,86 @@
 import { Menu } from "antd";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LogoutOutlined } from '@ant-design/icons';
+import { useContext } from "react";
+import { AuthContext } from "../App";
 
 const MenuCreator = () => {
     const location = useLocation();
-    return (
-        <Menu selectedKeys={[location.pathname]}>
-            <Menu.Item
-                key="all-tickets"
-                icon=""
-            >
-                <Link to="/user">همه تیکت‌ها</Link>
-            </Menu.Item>
+    let navigate = useNavigate();
+    const { state, dispatch } = useContext(AuthContext);
+
+    const logout = () => {
+        if (state.isAuthenticated) {
+            dispatch({
+                type: "LOGOUT",
+            });
+            navigate("/login")
+        }
+    }
+
+    const orgnaizationMenu = (
+        <>
+            <Menu.SubMenu title="تیکت‌ها" key="/user">
+                <Menu.Item
+                    key="/user"
+                    icon=""
+                >
+                    <Link to="/user">همه تیکت‌ها</Link>
+
+                </Menu.Item>
+
+                <Menu.Item
+                    key="/user/nearDeadline"
+                    icon=""
+                >
+                    <Link to="/user/nearDeadline">ددلاین نزدیک</Link>
+
+                </Menu.Item>
+
+                <Menu.Item
+                    key="/user/expired"
+                    icon=""
+                >
+                    <Link to="/user/expired">ددلاین رد شده</Link>
+
+                </Menu.Item>
+
+            </Menu.SubMenu>
 
             <Menu.Item
                 key="exit"
-                onClick={() => { }}
+                onClick={logout}
                 icon={<LogoutOutlined />}
             >
                 خروج
             </Menu.Item>
+        </>
+    )
+
+    const userMenu = (
+        <>
+
+            <Menu.Item
+                key="/user"
+                icon=""
+            >
+                <Link to="/user">همه تیکت‌ها</Link>
+
+            </Menu.Item>
+            <Menu.Item
+                key="exit"
+                onClick={logout}
+                icon={<LogoutOutlined />}
+            >
+                خروج
+            </Menu.Item>
+        </>
+    )
+
+    return (
+        <Menu selectedKeys={[location.pathname]} mode="inline" defaultOpenKeys={[location.pathname]}>
+            {state.role === "ROLE_USER" ? userMenu : orgnaizationMenu}
+
         </Menu>
     )
 }

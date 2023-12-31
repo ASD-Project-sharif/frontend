@@ -40,7 +40,8 @@ const AllTicketsPage = () => {
     const tickets = [{
         "user": "ali",
         "message": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-        "createdAt": 1703613489000
+        "createdAt": 1703613489000,
+        "status": "open"
     }]
 
     const columns = [
@@ -52,14 +53,14 @@ const AllTicketsPage = () => {
             },
             render: (value) => value
         },
-        // {
-        //     title: 'وضعیت',
-        //     dataIndex: 'status',
-        //     sorter: (a, b, sortOrder) => {
-        //         sorter('status', sortOrder);
-        //     },
-        //     render: (value) => <FeedbackStatus status={value} />,
-        // },
+        {
+            title: 'وضعیت',
+            dataIndex: 'status',
+            sorter: (a, b, sortOrder) => {
+                sorter('status', sortOrder);
+            },
+            render: (value) => value,
+        },
         {
             title: 'پیام',
             dataIndex: 'message',
