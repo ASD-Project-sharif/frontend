@@ -12,8 +12,10 @@ const TicketRegister = () => {
     let navigate = useNavigate();
 
     useEffect(() => {
-        
-        navigate("/login")
+        if(!state.isAuthenticated) {
+            navigate("/login")
+
+        }
     }, [state.isAuthenticated, navigate]);
 
     const onChange = (date, dateString) => {

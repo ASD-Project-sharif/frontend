@@ -38,9 +38,10 @@ const LoginPage = () => {
             dispatch({
                 type: "LOGIN",
                 payload: {
-                    token: response.data.token,
+                    token: response.data.accessToken,
                     role: response.data.role,
                     user: values["username"],
+                    id: response.data.id
                 },
             });
             navigate("/user");

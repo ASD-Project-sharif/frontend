@@ -32,9 +32,10 @@ const initialState = {
 
 const reducer = (state, action) => {
   let token = null;
+  console.log(action.payload)
   switch (action.type) {
     case "LOGIN":
-      token = "Token " + action.payload.accessToken;
+      token = "Token " + action.payload.token;
       localStorage.setItem("user", JSON.stringify(action.payload.user));
       localStorage.setItem("token", JSON.stringify(token));
       localStorage.setItem("role", JSON.stringify(action.payload.role));
