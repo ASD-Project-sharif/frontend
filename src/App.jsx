@@ -7,6 +7,7 @@ import UserPage from './pages/UserPage';
 import MainPage from './pages/MainPage';
 import AllTicketsPage from './pages/AllTicketsPage';
 import TicketRegister from './pages/TicketRegister';
+import TicketSubmitted from './pages/TicketSubmitted';
 
 
 (async function () {
@@ -24,22 +25,26 @@ const initialState = {
   isAuthenticated: !!localStorage.getItem("token"),
   user: JSON.parse(localStorage.getItem("user")),
   token: JSON.parse(localStorage.getItem("token")),
-  role: JSON.parse(localStorage.getItem("role"))
+  role: JSON.parse(localStorage.getItem("role")),
+  id: JSON.parse(localStorage.getItem("id"))
 };
 
 const reducer = (state, action) => {
   let token = null;
   switch (action.type) {
     case "LOGIN":
-      token = "Token " + action.payload.token;
+      token = "Token " + action.payload.accessToken;
       localStorage.setItem("user", JSON.stringify(action.payload.user));
       localStorage.setItem("token", JSON.stringify(token));
       localStorage.setItem("role", JSON.stringify(action.payload.role));
+      localStorage.setItem("role", JSON.stringify(action.payload.id));
       return {
         ...state,
         isAuthenticated: true,
         user: action.payload.user,
         token: token,
+        role: action.payload.role,
+        id: action.payload.id
       };
     case "LOGOUT":
       localStorage.clear();
@@ -65,6 +70,7 @@ function App() {
         }}
       >
         <Routes>
+          <Route path="/ticketSubmitted" element={<TicketSubmitted />} />
           <Route path="/support/:organizationName" element={<TicketRegister />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
