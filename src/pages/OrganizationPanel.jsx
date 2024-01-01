@@ -1,18 +1,15 @@
-import { useContext } from "react";
-import { AuthContext } from "../App";
+
 import { Layout } from "antd";
 import Sidebar from "../components/sideBar";
 import { Outlet } from "react-router-dom";
 
-const UserPage = () => {
-    const { state } = useContext(AuthContext);
+const OrganizationPanel = () => {
     return (
         <div>
             <Layout className="layout">
                 <Sidebar />
                 <Layout>
                     <Layout.Content style={{ margin: '16px' }}>
-                        {state.name}
                         <Outlet />
                     </Layout.Content>
 
@@ -22,4 +19,4 @@ const UserPage = () => {
     )
 }
 
-export default UserPage;
+export default OrganizationPanel;

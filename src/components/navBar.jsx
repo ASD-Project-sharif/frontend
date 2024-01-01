@@ -1,6 +1,6 @@
 import { Row, Col, Button } from "antd";
 import { useContext } from "react";
-// import logo from "../assets/logo.svg";
+import logo from "../assets/logo.svg";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../App";
@@ -32,8 +32,8 @@ const NavBar = () => {
             <Col span={6}></Col>
             <Col span={12} className="nav-item">
                 <Link to="/">
-                    تیکت آنلاین
-                    {/* <img className="logo" src={logo} width={100} height={100} alt="logo" /> */}
+                    <img className="logo" src={logo} width={70} height={70} alt="logo" />
+                    کبوتر
                 </Link>
                 {/* <div>
                     تماس با ما

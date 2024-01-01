@@ -3,11 +3,12 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import { createContext, useReducer } from 'react';
-import UserPage from './pages/UserPage';
+import OrganizationPanel from './pages/OrganizationPanel';
 import MainPage from './pages/MainPage';
 import AllTicketsPage from './pages/AllTicketsPage';
 import TicketRegister from './pages/TicketRegister';
 import TicketSubmitted from './pages/TicketSubmitted';
+import UserPanel from './pages/UserPanel';
 
 
 (async function () {
@@ -37,14 +38,14 @@ const reducer = (state, action) => {
       localStorage.setItem("user", JSON.stringify(action.payload.user));
       localStorage.setItem("token", JSON.stringify(token));
       localStorage.setItem("role", JSON.stringify(action.payload.role));
-      localStorage.setItem("role", JSON.stringify(action.payload.id));
+      localStorage.setItem("id", JSON.stringify(action.payload.id));
       return {
         ...state,
         isAuthenticated: true,
         user: action.payload.user,
-        token: token,
+        id: action.payload.id,
         role: action.payload.role,
-        id: action.payload.id
+        token: token,
       };
     case "LOGOUT":
       localStorage.clear();
@@ -61,6 +62,48 @@ const reducer = (state, action) => {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const getPanel = () => {
+    if (!state.isAuthenticated) {
+      return (
+        <Route
+          path="/user"
+          element={
+            state.isAuthenticated ? (
+              <OrganizationPanel />
+            ) : (
+              <Navigate replace to="/login" />
+            )
+          }
+        />
+      )
+    }
+    console.log(state.role)
+    if (state.role === "ROLE_ADMIN" || state.role === "ROLE_AGENT") {
+      return (
+        <Route
+          path="/user"
+          element={
+            <OrganizationPanel />
+          }
+        >
+          <Route index element={<AllTicketsPage />} />
+        </Route>
+      )
+    } else {
+      return (
+        <Route
+          path="/user"
+          element={
+            <UserPanel />
+          }
+        >
+          <Route index element={<div>hi</div>} />
+        </Route>
+      )
+
+    }
+  }
   return (
     <>
       <AuthContext.Provider
@@ -74,18 +117,7 @@ function App() {
           <Route path="/support/:organizationName" element={<TicketRegister />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route
-            path="/user"
-            element={
-              state.isAuthenticated ? (
-                <UserPage />
-              ) : (
-                <Navigate replace to="/login" />
-              )
-            }
-          >
-            <Route index element={<AllTicketsPage />} />
-          </Route>
+          {getPanel()}
           <Route path="/" element={<MainPage />} />
         </Routes>
       </AuthContext.Provider>
