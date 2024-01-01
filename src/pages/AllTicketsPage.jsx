@@ -5,6 +5,10 @@ import { Table, theme } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { limit } from 'stringz';
 import dayjs from 'dayjs';
+import Filter from "../components/filter";
+import { useState } from "react";
+import config from "../config/config";
+import axios from "axios";
 
 const persianNumbers = ['۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', '۰'];
 const englishNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
@@ -36,6 +40,26 @@ const AllTicketsPage = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+
+    const pageSize = 20;
+
+    const [filter, setFilter] = useState({});
+    // const [sort, setSort] = useState();
+    // const [sortBy, setSortBy] = useState()
+
+    // useEffect(() => {
+    //     (async () => {
+    //         try {
+    //             await axios.post(
+    //                 `${config.baseUrl}/api/v1/ticket`,
+    //                 {
+
+    //                 }
+    //               );
+    //         } catch (error) {}
+    //       })();
+
+    // }, [filter]);
 
     const tickets = [{
         "user": "ali",
@@ -77,14 +101,9 @@ const AllTicketsPage = () => {
     ];
 
     function sorter(sortBy, sortOrder) {
-        sortOrder = sortOrder === 'descend' ? 'desc' : 'asc';
+        sortOrder = sortOrder === 'descend' ? 'DESC' : 'ASC';
 
-        // dispatch(
-        //   setFeedbacksSort({
-        //     sortBy,
-        //     sortOrder,
-        //   }),
-        // );
+
     }
 
     function sliceText(value, n = 75) {
@@ -103,7 +122,10 @@ const AllTicketsPage = () => {
     return (
         <div>
             <Header style={{ padding: "0px 30px", background: colorBgContainer, borderRadius: 15 }}>
-                همه تیکت‌ها
+                <span>
+                    همه تیکت‌ها
+                </span>
+                <Filter setFilterValues={setFilter} />
             </Header>
             <Table
                 // onRow={(record) => {

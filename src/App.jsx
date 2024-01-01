@@ -24,7 +24,8 @@ const initialState = {
   isAuthenticated: !!localStorage.getItem("token"),
   user: JSON.parse(localStorage.getItem("user")),
   token: JSON.parse(localStorage.getItem("token")),
-  role: JSON.parse(localStorage.getItem("role"))
+  role: JSON.parse(localStorage.getItem("role")),
+  id: JSON.parse(localStorage.getItem("id"))
 };
 
 const reducer = (state, action) => {
@@ -35,10 +36,12 @@ const reducer = (state, action) => {
       localStorage.setItem("user", JSON.stringify(action.payload.user));
       localStorage.setItem("token", JSON.stringify(token));
       localStorage.setItem("role", JSON.stringify(action.payload.role));
+      localStorage.setItem("id", JSON.stringify(action.payload.id));
       return {
         ...state,
         isAuthenticated: true,
         user: action.payload.user,
+        id: action.payload.id,
         role: action.payload.role,
         token: token,
       };
