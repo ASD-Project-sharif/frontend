@@ -1,12 +1,12 @@
 
 // import { PageHeader } from 'antd';
 
-import { Table, theme } from "antd";
+import { Table, message, theme } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { limit } from 'stringz';
 import dayjs from 'dayjs';
 import Filter from "../components/filter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import config from "../config/config";
 import axios from "axios";
 
@@ -40,33 +40,55 @@ const AllTicketsPage = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+    const [messageApi, contextHolder] = message.useMessage();
 
     const pageSize = 20;
 
     const [filter, setFilter] = useState({});
-    // const [sort, setSort] = useState();
-    // const [sortBy, setSortBy] = useState()
-
-    // useEffect(() => {
-    //     (async () => {
-    //         try {
-    //             await axios.post(
-    //                 `${config.baseUrl}/api/v1/ticket`,
-    //                 {
-
-    //                 }
-    //               );
-    //         } catch (error) {}
-    //       })();
-
-    // }, [filter]);
-
-    const tickets = [{
+    const [sortOrder, setSortOrder] = useState();
+    const [sortBy, setSortBy] = useState()
+    const [tickets, setTickets] = useState([{
         "user": "ali",
         "message": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
         "createdAt": 1703613489000,
         "status": "open"
-    }]
+    }]);
+
+    const [page, setPage] = useState(1);
+    const [totalCount, setTotalCount] = useState();
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        (async () => {
+            try {
+                setLoading(true);
+                const response = await axios.post(
+                    `${config.baseUrl}/api/v1/ticket`,
+                    {
+                        filter: filter,
+                        sort: {
+                            sortBy: sortBy,
+                            sortOrder: sortOrder
+                        },
+                        pageSize: pageSize,
+
+                    }
+                );
+                setTotalCount(response.data.count);
+                setTickets(response.data.tickets);
+            } catch (error) {
+                errorMessage(error)
+            }
+        })();
+
+    }, [filter, sortOrder, sortBy, page]);
+
+    const errorMessage = (error) => {
+        messageApi.open({
+            type: "error",
+            content: error.response.data.message,
+        });
+    };
 
     const columns = [
         {
@@ -103,7 +125,8 @@ const AllTicketsPage = () => {
     function sorter(sortBy, sortOrder) {
         sortOrder = sortOrder === 'descend' ? 'DESC' : 'ASC';
 
-
+        setSortOrder(sortOrder);
+        setSortBy(sortBy);
     }
 
     function sliceText(value, n = 75) {
@@ -121,6 +144,7 @@ const AllTicketsPage = () => {
 
     return (
         <div>
+            {contextHolder}
             <Header style={{ padding: "0px 30px", background: colorBgContainer, borderRadius: 15 }}>
                 <span>
                     همه تیکت‌ها
@@ -138,21 +162,16 @@ const AllTicketsPage = () => {
                 // }}
                 size="small"
                 rowKey="id"
-                // loading={loading}
+                loading={loading}
                 columns={columns}
                 dataSource={tickets}
-            // pagination={{
-            //     pageSize,
-            //     total: count,
-            //     onChange: (page, pageSize) => {
-            //         dispatch(
-            //             changeFeedbacksPagination({
-            //                 page,
-            //                 pageSize,
-            //             }),
-            //         );
-            //     },
-            // }}
+                pagination={{
+                    pageSize,
+                    total: totalCount,
+                    onChange: (page, pageSize) => {
+                        setPage(page);
+                    },
+                }}
             />
         </div>
     )

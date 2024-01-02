@@ -7,6 +7,8 @@ import OrganizationPanel from './pages/OrganizationPanel';
 import MainPage from './pages/MainPage';
 import AllTicketsPage from './pages/AllTicketsPage';
 import UserPanel from './pages/UserPanel';
+import TicketRegister from './pages/TicketRegister';
+import TicketSubmitted from './pages/TicketSubmitted';
 
 
 (async function () {
@@ -111,6 +113,8 @@ function App() {
         }}
       >
         <Routes>
+          <Route path="/ticketSubmitted" element={<TicketSubmitted />} />
+          <Route path="/support/:organizationName" element={<TicketRegister />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           {getPanel()}
