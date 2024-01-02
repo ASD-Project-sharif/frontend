@@ -1,5 +1,5 @@
 import { FilterOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Drawer, Form, Input, Select } from 'antd';
+import { Button, DatePicker, Drawer, Form, Select } from 'antd';
 import { useState } from 'react';
 
 const Filter = ({ setFilterValues }) => {
@@ -32,25 +32,29 @@ const Filter = ({ setFilterValues }) => {
                 >
                     <Form.Item label="نوع" name="type">
                         <Select>
-                            <Select.Option value="BUG">مشکل</Select.Option>
-                            <Select.Option value="SUGGESTION">پیشنهاد</Select.Option>
-                            <Select.Option value="QUESTION">سوال</Select.Option>
+                            <Select.Option value="bug">مشکل</Select.Option>
+                            <Select.Option value="suggestion">پیشنهاد</Select.Option>
+                            <Select.Option value="question">سوال</Select.Option>
                         </Select>
                     </Form.Item>
                     <Form.Item label="وضعیت" name="status">
                         <Select>
-                            <Select.Option value="ACTIVE">در حال انتظار</Select.Option>
-                            <Select.Option value="DONE">انجام شده</Select.Option>
+                            <Select.Option value="in_progress">در جریان</Select.Option>
+                            <Select.Option value="closed">بسته شده</Select.Option>
+                            <Select.Option value="waiting_for_admin">در انتظار اساین</Select.Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item label="شناسه کاربری" name="assignee">
-                        <Input />
-                    </Form.Item>
 
-                    <Form.Item label="تاریخ ساخت" name="createdAt">
+                    <Form.Item label="تاریخ ساخت(شروع بازه)" name="intervalStart">
                         <DatePicker
                             className="startPicker"
-                            placeholder="تاریخ ساخت"
+                            placeholder="شروع بازه"
+                        />
+                    </Form.Item>
+                    <Form.Item label="تاریخ ساخت(شروع بازه)" name="intervalEnd">
+                        <DatePicker
+                            className="startPicker"
+                            placeholder='انتهای بازه'
                         />
                     </Form.Item>
                     <Form.Item wrapperCol={{ span: 8 }}>

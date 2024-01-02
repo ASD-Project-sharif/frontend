@@ -6,9 +6,11 @@ import { Header } from "antd/es/layout/layout";
 import { limit } from 'stringz';
 import dayjs from 'dayjs';
 import Filter from "../components/filter";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import config from "../config/config";
 import axios from "axios";
+import { AuthContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 const persianNumbers = ['۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', '۰'];
 const englishNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
@@ -40,43 +42,51 @@ const AllTicketsPage = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+    const { state } = useContext(AuthContext);
     const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate()
 
     const pageSize = 20;
 
     const [filter, setFilter] = useState({});
-    const [sortOrder, setSortOrder] = useState();
-    const [sortBy, setSortBy] = useState()
+    const [sortOrder, setSortOrder] = useState("DESC");
+    const [sortBy, setSortBy] = useState("created_at")
     const [tickets, setTickets] = useState([{
         "user": "ali",
         "message": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-        "createdAt": 1703613489000,
+        "created_at": 1703613489000,
         "status": "open"
     }]);
 
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState();
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         (async () => {
             try {
                 setLoading(true);
-                const response = await axios.post(
-                    `${config.baseUrl}/api/v1/ticket`,
-                    {
-                        filter: filter,
-                        sort: {
-                            sortBy: sortBy,
-                            sortOrder: sortOrder
-                        },
-                        pageSize: pageSize,
+                const data = {
+                    filter: filter,
+                    sort: {
+                        sortBy: sortBy,
+                        sortOrder: sortOrder
+                    },
+                    pageSize: pageSize,
+                    pageNumber: page
 
-                    }
+                }
+                const headers = { "x-access-token": state.token }
+                const response = await axios.get(
+                    `${config.baseUrl}/api/v1/ticket/organization/${state.id}`,
+                    { headers: headers, params: data },
+                    data
                 );
+                setLoading(false)
                 setTotalCount(response.data.count);
                 setTickets(response.data.tickets);
             } catch (error) {
+                setLoading(false)
                 errorMessage(error)
             }
         })();
@@ -94,29 +104,29 @@ const AllTicketsPage = () => {
         {
             title: 'کاربر',
             dataIndex: 'user',
-            sorter: (a, b, sortOrder) => {
-                sorter('name', sortOrder);
-            },
+            // sorter: (a, b, sortOrder) => {
+            //     sorter('name', sortOrder);
+            // },
             render: (value) => value
         },
         {
             title: 'وضعیت',
             dataIndex: 'status',
-            sorter: (a, b, sortOrder) => {
-                sorter('status', sortOrder);
-            },
+            // sorter: (a, b, sortOrder) => {
+            //     sorter('status', sortOrder);
+            // },
             render: (value) => value,
         },
         {
             title: 'پیام',
-            dataIndex: 'message',
+            dataIndex: 'description',
             render: (value) => sliceText(value),
         },
         {
             title: 'تاریخ ارسال',
-            dataIndex: 'createdAt',
+            dataIndex: 'created_at',
             sorter: (a, b, sortOrder) => {
-                sorter('createdAt', sortOrder);
+                sorter('created_at', sortOrder);
             },
             render: (value) => formatDate(value),
         },
@@ -152,14 +162,13 @@ const AllTicketsPage = () => {
                 <Filter setFilterValues={setFilter} />
             </Header>
             <Table
-                // onRow={(record) => {
-                //     return {
-                //         onClick: () => {
-                //             setSelected(record);
-                //             setVisible(true);
-                //         },
-                //     };
-                // }}
+                onRow={(record) => {
+                    return {
+                        onClick: () => {
+                            navigate(`/ticket/${record.id}`)
+                        },
+                    };
+                }}
                 size="small"
                 rowKey="id"
                 loading={loading}
