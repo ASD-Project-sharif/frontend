@@ -9,7 +9,6 @@ import AllTicketsPage from './pages/AllTicketsPage';
 import UserPanel from './pages/UserPanel';
 import TicketRegister from './pages/TicketRegister';
 import TicketSubmitted from './pages/TicketSubmitted';
-import TicketPage from './pages/TicketPage';
 
 
 (async function () {
@@ -89,7 +88,6 @@ function App() {
           }
         >
           <Route index element={<AllTicketsPage />} />
-          <Route path="/ticket/:ticketId" element={<TicketPage />} />
         </Route>
       )
     } else {
@@ -115,7 +113,6 @@ function App() {
         }}
       >
         <Routes>
-          <Route path="/"
           <Route path="/ticketSubmitted" element={<TicketSubmitted />} />
           <Route path="/support/:organizationName" element={<TicketRegister />} />
           <Route path="/login" element={<LoginPage />} />
