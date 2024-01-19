@@ -54,7 +54,6 @@ const TicketTable = ({ filter, deadlineStatus }) => {
                 const response = await axios.get(
                     `${config.baseUrl}/api/v1/ticket/organization/${state.id}`,
                     { headers: headers, params: data },
-                    data
                 );
                 setLoading(false);
                 setTotalCount(response.data.count);

@@ -1,12 +1,17 @@
 import { Table, message, theme } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AgentCreator from "../components/agentCreator";
+import { AuthContext } from "../App";
+import axios from "axios";
+import config from "../config/config";
 
 const AgentsPage = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+    const { state } = useContext(AuthContext);
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
 
@@ -14,11 +19,40 @@ const AgentsPage = () => {
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState();
     const [loading, setLoading] = useState(false);
-    const [agents, setAgents] = useState();
+    const [agents, setAgents] = useState([{ "name": "ali", "username": "ali" }]);
+
+    const getAgents = async () => {
+        try {
+            setLoading(true);
+            const data = {
+                pageSize: pageSize,
+                pageNumber: page,
+
+            }
+            const headers = { "x-access-token": state.token }
+            const response = await axios.get(
+                `${config.baseUrl}/api/v1/agents`,
+                { headers: headers, params: data },
+            );
+            setLoading(false);
+            setTotalCount(response.data.count);
+            setAgents(response.data.agents);
+        } catch (error) {
+            setLoading(false);
+            errorMessage(error);
+        }
+    }
+
+    const errorMessage = (error) => {
+        messageApi.open({
+            type: "error",
+            content: error.response.data.message,
+        });
+    };
 
     const columns = [
         {
-            title: 'کاربر',
+            title: 'نام کاربری',
             dataIndex: 'username',
             render: (value) => value
         },
@@ -27,21 +61,11 @@ const AgentsPage = () => {
             dataIndex: 'name',
             render: (value) => value,
         },
-        // {
-        //     title: 'وضعیت ددلاین',
-        //     dataIndex: 'deadlineStatus',
-        //     render: (value) => {
-        //         if (value === "near") {
-        //             return <Tag color="warning">نزدیک به ددلاین</Tag>
-        //         } else if (value === "passed") {
-        //             return <Tag color="error">ددلاین رد شده</Tag>
-        //         } else {
-        //             return <Tag color="success">خبری نیس</Tag>
-        //         }
-
-        //     }
-        // },
     ];
+
+    useEffect(() => {
+        getAgents();
+    });
 
     return (
         <div>
@@ -50,9 +74,8 @@ const AgentsPage = () => {
                 <span>
                     ایجنت‌ها
                 </span>
+                <AgentCreator getAgents={getAgents} />
             </Header>
-
-
             <Table
                 onRow={(record) => {
                     return {
