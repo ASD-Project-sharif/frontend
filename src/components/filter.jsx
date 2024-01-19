@@ -51,7 +51,7 @@ const Filter = ({ setFilterValues }) => {
                             placeholder="شروع بازه"
                         />
                     </Form.Item>
-                    <Form.Item label="تاریخ ساخت(شروع بازه)" name="intervalEnd">
+                    <Form.Item label="تاریخ ساخت(انتهای بازه)" name="intervalEnd">
                         <DatePicker
                             className="startPicker"
                             placeholder='انتهای بازه'

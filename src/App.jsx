@@ -12,6 +12,7 @@ import TicketSubmitted from './pages/TicketSubmitted';
 import NearDeadlinePage from './pages/NearDeadlinePage';
 import PassedDeadlinePage from './pages/PassedTicketsPage';
 import AgentsPage from './pages/AgentsPage';
+import AllUserTicketPage from './pages/AllUserTicketPage';
 
 
 (async function () {
@@ -104,7 +105,7 @@ function App() {
             <UserPanel />
           }
         >
-          <Route index element={<div>hi</div>} />
+          <Route index element={<AllUserTicketPage />} />
         </Route>
       )
 
