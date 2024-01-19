@@ -12,9 +12,9 @@ const Filter = ({ setFilterValues }) => {
         <>
             <Button
                 onClick={() => setVisible(true)}
-                type="link"
+                type="primary"
                 icon={<FilterOutlined className="filter-icon" />}
-            />
+            >اعمال فیلتر</Button>
             <Drawer
                 width="40%"
                 title="فیلتر"
