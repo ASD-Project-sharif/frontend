@@ -1,26 +1,25 @@
 import { theme } from "antd";
-import { Header } from "antd/es/layout/layout";
-import Filter from "../components/filter";
+import { Header } from "antd/es/layout/layout"
 import { useState } from "react";
+import Filter from "../components/filter";
 import TicketTable from "../components/ticketTable";
 
-const AllTicketsPage = () => {
+const NearDeadlinePage = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
     const [filter, setFilter] = useState({});
-
     return (
         <div>
             <Header style={{ background: colorBgContainer }} className="panel-header">
                 <span>
-                    همه تیکت‌ها
+                    تیکت‌های نزدیک ددلاین
                 </span>
                 <Filter setFilterValues={setFilter} />
             </Header>
-            <TicketTable filter={filter} deadlineStatus={undefined} />
+            <TicketTable filter={filter} deadlineStatus="near" />
         </div>
     )
 }
 
-export default AllTicketsPage;
+export default NearDeadlinePage;
