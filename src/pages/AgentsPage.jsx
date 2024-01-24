@@ -77,13 +77,6 @@ const AgentsPage = () => {
                 <AgentCreator getAgents={getAgents} />
             </Header>
             <Table
-                onRow={(record) => {
-                    return {
-                        onClick: () => {
-                            navigate(`/agnet/${record.id}`)
-                        },
-                    };
-                }}
                 size="small"
                 rowKey="id"
                 loading={loading}
