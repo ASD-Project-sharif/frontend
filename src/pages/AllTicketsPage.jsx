@@ -13,9 +13,9 @@ const AllTicketsPage = () => {
     return (
         <div>
             <Header style={{ background: colorBgContainer }} className="panel-header">
-                <span>
+                <h3>
                     همه تیکت‌ها
-                </span>
+                </h3>
                 <Filter setFilterValues={setFilter} />
             </Header>
             <TicketTable filter={filter} deadlineStatus={undefined} />

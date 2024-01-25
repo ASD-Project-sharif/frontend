@@ -13,6 +13,7 @@ import NearDeadlinePage from './pages/NearDeadlinePage';
 import PassedDeadlinePage from './pages/PassedTicketsPage';
 import AgentsPage from './pages/AgentsPage';
 import AllUserTicketPage from './pages/AllUserTicketPage';
+import ProductsPage from './pages/ProductsPage';
 
 
 (async function () {
@@ -110,6 +111,7 @@ function App() {
           <Route path="/user/nearDeadline" element={<NearDeadlinePage />} />
           <Route path="/user/passedDeadline" element={<PassedDeadlinePage />} />
           <Route path="/user/agents" element={<AgentsPage />} />
+          <Route path="/user/products" element={<ProductsPage />} />
         </Route>
       )
     } else {

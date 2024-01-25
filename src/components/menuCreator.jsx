@@ -48,6 +48,14 @@ const MenuCreator = () => {
             </Menu.SubMenu>
 
             <Menu.Item
+                key="/user/products"
+                icon=""
+            >
+                <Link to="/user/products">محصولات</Link>
+
+            </Menu.Item>
+
+            <Menu.Item
                 key="/user/agents"
                 icon=""
             >

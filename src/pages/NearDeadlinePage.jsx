@@ -12,9 +12,9 @@ const NearDeadlinePage = () => {
     return (
         <div>
             <Header style={{ background: colorBgContainer }} className="panel-header">
-                <span>
+                <h3>
                     تیکت‌های نزدیک ددلاین
-                </span>
+                </h3>
                 <Filter setFilterValues={setFilter} />
             </Header>
             <TicketTable filter={filter} deadlineStatus="near" />

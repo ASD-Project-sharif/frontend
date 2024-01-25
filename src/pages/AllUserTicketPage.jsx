@@ -99,9 +99,9 @@ const AllUserTicketPage = () => {
         <div>
             {contextHolder}
             <Header style={{ background: colorBgContainer }} className="panel-header">
-                <span>
+                <h3>
                     همه تیکت‌ها
-                </span>
+                </h3>
             </Header>
 
             <Table
