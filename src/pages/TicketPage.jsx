@@ -1,5 +1,5 @@
-import { Button, Col, Row, Table, Card, Flex } from "antd";
-import { useState } from "react";
+import { Button, Col, Row, Table, Card, Flex, Modal, Input } from "antd";
+import {React, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const ticketStatus = {
@@ -76,6 +76,25 @@ const TicketPage = () => {
         }
     ];
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    // const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    //     console.log('Change:', e.target.value);
+    //   };
+
+    const { TextArea } = Input;
+
+
 
     return (
         <div>
@@ -87,12 +106,12 @@ const TicketPage = () => {
                 </Col>
                 <Col span={8} className="ticket-title">
                     <Flex gap="middle">
-                        <Button size="large" block type="primary" htmlType="submit">
-                        ثبت پاسخ جدید
-                       </Button>
-                      <Button size="large" block type="primary" htmlType="submit" danger>
-                        بستن تیکت
-                      </Button>
+                        <Button size="large" block type="primary" onClick={showModal}>
+                            ثبت پاسخ جدید
+                        </Button>
+                        <Button size="large" block type="primary" htmlType="submit" danger>
+                            بستن تیکت
+                        </Button>
                     </Flex>
                 </Col>
             </Row>
@@ -105,6 +124,16 @@ const TicketPage = () => {
                     {comments}
                 </Card>
             </Card>
+            <Modal title="ثبت پاسخ جدید" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                <p>متن پاسخ خود را وارد کنید.</p>
+                <TextArea
+                    showCount
+                    maxLength={500}
+                    // onChange={onChange}
+                    placeholder="متن پاسخ"
+                    style={{ height: 120, resize: 'none', marginBottom: 16}}
+                />
+            </Modal>
         </div>
     )
 }
