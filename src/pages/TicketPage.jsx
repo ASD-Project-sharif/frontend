@@ -1,11 +1,12 @@
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, Table } from "antd";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+
 
 const ticketStatus = {
     "waiting_for_admin": "در انتظار اساین شدن",
     "closed": "بسته شده",
-    "in_progress": "در جریان"
+    "in_progress": "در جریان",
 }
 
 const TicketPage = () => {
@@ -24,8 +25,42 @@ const TicketPage = () => {
         "type": "bug",
         "deadline": "2024-01-22T22:20:57.390+00:00",
         "created_at": "2024-01-01T22:20:57.390+00:00",
-        "updated_at": "2024-01-02T22:20:57.390+00:00"
+        "updated_at": "2024-01-02T22:20:57.390+00:00",
+        "comments": [{ "created_by": { "name": "ممد", "id": "0098" }, "created_at": "2024-01-02T22:20:57.390+00:00", "text": "نمیدانم به مولا", "updated_at": "2024-01-02T22:20:57.390+00:00" }],
     });
+
+    const columns = [
+        {
+            title: 'فرستنده',
+            dataIndex: 'sender',
+            key: 'sender',
+        },
+        {
+            title: 'زمان ارسال',
+            dataIndex: 'send_time',
+            key: 'send_time',
+        },
+        {
+            title: 'نوع تیکت',
+            dataIndex: 'ticket_type',
+            key: 'ticket-type',
+        },
+        {
+            title: 'ددلاین پاسخگویی',
+            key: 'ticket_deadline',
+            dataIndex: 'ticket_deadline',
+        },
+    ];
+
+    const data = [
+        {
+            key: '1',
+            sender: [ticketInfo.created_by.name],
+            send_time: [ticketInfo.created_at],
+            ticket_type: [ticketStatus[ticketInfo.status]],
+            ticket_deadline: [ticketInfo.deadline]
+        }
+    ];
 
 
     return (
@@ -42,28 +77,7 @@ const TicketPage = () => {
                     </Button>
                 </Col>
             </Row>
-            <Row>
-                <Col span={8} className="indicator-col">
-                    فرستنده
-                </Col>
-                <Col span={8} className="indicator-col">
-                    زمان ارسال
-                </Col>
-                <Col span={8} className="indicator-col">
-                    نوع تیکت
-                </Col>
-            </Row>
-            <Row>
-                <Col span={8} className="value-col">
-                    {ticketInfo["created_by"].name}
-                </Col>
-                <Col span={8} className="value-col">
-                    {ticketInfo.created_at}
-                </Col>
-                <Col span={8} className="value-col">
-                    {ticketStatus[ticketInfo.status]}
-                </Col>
-            </Row>
+            <Table columns={columns} dataSource={data} pagination={false} />
         </div>
     )
 }
