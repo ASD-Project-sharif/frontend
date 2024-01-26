@@ -2,7 +2,6 @@ import { Button, Col, Row, Table } from "antd";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-
 const ticketStatus = {
     "waiting_for_admin": "در انتظار اساین شدن",
     "closed": "بسته شده",
@@ -12,7 +11,6 @@ const ticketStatus = {
 const TicketPage = () => {
 
     const { ticketId } = useParams();
-
 
     const [ticketInfo, setTicketInfo] = useState({
         "id": "110011",
@@ -29,6 +27,8 @@ const TicketPage = () => {
         "comments": [{ "created_by": { "name": "ممد", "id": "0098" }, "created_at": "2024-01-02T22:20:57.390+00:00", "text": "نمیدانم به مولا", "updated_at": "2024-01-02T22:20:57.390+00:00" }],
     });
 
+    const header = "تیکت" + ticketInfo.id ;
+    
     const columns = [
         {
             title: 'فرستنده',
@@ -68,7 +68,7 @@ const TicketPage = () => {
             <Row>
                 <Col span={20}>
                     <h1>
-                        تیکت 11011
+                        {header}
                     </h1>
                 </Col>
                 <Col span={4} className="ticket-title">
@@ -78,6 +78,7 @@ const TicketPage = () => {
                 </Col>
             </Row>
             <Table columns={columns} dataSource={data} pagination={false} />
+
         </div>
     )
 }
