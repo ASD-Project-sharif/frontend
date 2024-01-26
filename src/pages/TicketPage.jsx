@@ -1,4 +1,4 @@
-import { Button, Col, Row, Table, Card } from "antd";
+import { Button, Col, Row, Table, Card, Flex } from "antd";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -37,8 +37,6 @@ const TicketPage = () => {
         </div>
     ));
 
-
-
     const columns = [
         {
             title: 'فرستنده',
@@ -56,6 +54,11 @@ const TicketPage = () => {
             key: 'ticket-type',
         },
         {
+            title: 'ایجنت مربوطه ',
+            dataIndex: 'assigned_agent',
+            key: 'assigned_agent',
+        },
+        {
             title: 'ددلاین پاسخگویی',
             key: 'ticket_deadline',
             dataIndex: 'ticket_deadline',
@@ -68,6 +71,7 @@ const TicketPage = () => {
             sender: [ticketInfo.created_by.name],
             send_time: [ticketInfo.created_at],
             ticket_type: [ticketStatus[ticketInfo.status]],
+            assigned_agent: [ticketInfo.asignee.name],
             ticket_deadline: [ticketInfo.deadline]
         }
     ];
@@ -76,24 +80,28 @@ const TicketPage = () => {
     return (
         <div>
             <Row>
-                <Col span={20}>
+                <Col span={16}>
                     <h1>
                         {header}
                     </h1>
                 </Col>
-                <Col span={4} className="ticket-title">
-                    <Button size="large" block type="primary" htmlType="submit" >
+                <Col span={8} className="ticket-title">
+                    <Flex gap="middle">
+                        <Button size="large" block type="primary" htmlType="submit">
+                        ثبت پاسخ جدید
+                       </Button>
+                      <Button size="large" block type="primary" htmlType="submit" danger>
                         بستن تیکت
-                    </Button>
+                      </Button>
+                    </Flex>
                 </Col>
             </Row>
             <Table columns={columns} dataSource={data} pagination={false} />
             <Card title={ticketInfo.title}>
-                <p style={{marginBottom: 16, marginTop: 0}}>
-                {ticketInfo.description}
+                <p style={{ marginBottom: 16, marginTop: 0 }}>
+                    {ticketInfo.description}
                 </p>
-
-                <Card type="inner" title= {commentHeader} style={{marginBottom: 16}} >
+                <Card type="inner" title={commentHeader} style={{ marginBottom: 16 }} >
                     {comments}
                 </Card>
             </Card>
