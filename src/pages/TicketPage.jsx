@@ -1,4 +1,4 @@
-import { Button, Col, Row, Table } from "antd";
+import { Button, Col, Row, Table, Card } from "antd";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -27,8 +27,18 @@ const TicketPage = () => {
         "comments": [{ "created_by": { "name": "ممد", "id": "0098" }, "created_at": "2024-01-02T22:20:57.390+00:00", "text": "نمیدانم به مولا", "updated_at": "2024-01-02T22:20:57.390+00:00" }],
     });
 
-    const header = "تیکت" + ticketInfo.id ;
-    
+    const header = "تیکت" + ticketInfo.id;
+    const agentName = ticketInfo.comments.length > 0 ? ticketInfo.comments[0].created_by.name : '';
+    const commentCreationTime = ticketInfo.comments.length > 0 ? ticketInfo.comments[0].created_at : '';
+    const commentHeader = agentName + "     " + commentCreationTime
+    const comments = ticketInfo.comments.map((comment, index) => (
+        <div key={index}>
+            <p>{comment.text}</p>
+        </div>
+    ));
+
+
+
     const columns = [
         {
             title: 'فرستنده',
@@ -78,7 +88,15 @@ const TicketPage = () => {
                 </Col>
             </Row>
             <Table columns={columns} dataSource={data} pagination={false} />
+            <Card title={ticketInfo.title}>
+                <p style={{marginBottom: 16, marginTop: 0}}>
+                {ticketInfo.description}
+                </p>
 
+                <Card type="inner" title= {commentHeader} style={{marginBottom: 16}} >
+                    {comments}
+                </Card>
+            </Card>
         </div>
     )
 }
