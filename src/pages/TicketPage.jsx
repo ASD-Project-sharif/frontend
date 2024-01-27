@@ -1,5 +1,5 @@
 import { Button, Col, Row, Table, Card, Flex, Modal, Input } from "antd";
-import {React, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 const ticketStatus = {
@@ -94,6 +94,18 @@ const TicketPage = () => {
 
     const { TextArea } = Input;
 
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleTicketStatus = () => {
+        setIsOpen(!isOpen);
+        const newStatus = ticketInfo.status === "closed" ? "in_progress" : "closed";
+        setTicketInfo({
+            ...ticketInfo,
+            status: newStatus,
+        });
+        console.log(ticketInfo.status);
+    };
+
 
 
     return (
@@ -109,8 +121,8 @@ const TicketPage = () => {
                         <Button size="large" block type="primary" onClick={showModal}>
                             ثبت پاسخ جدید
                         </Button>
-                        <Button size="large" block type="primary" htmlType="submit" danger>
-                            بستن تیکت
+                        <Button size="large" block type="default" htmlType="submit" onClick={toggleTicketStatus} className={ticketInfo.status === 'in_progress' ? 'primary' : 'destructive'}>
+                            {ticketInfo.status === 'in_progress' ? 'باز کردن تیکت' : 'بستن تیکت'}
                         </Button>
                     </Flex>
                 </Col>
@@ -131,7 +143,7 @@ const TicketPage = () => {
                     maxLength={500}
                     // onChange={onChange}
                     placeholder="متن پاسخ"
-                    style={{ height: 120, resize: 'none', marginBottom: 16}}
+                    style={{ height: 120, resize: 'none', marginBottom: 16 }}
                 />
             </Modal>
         </div>
