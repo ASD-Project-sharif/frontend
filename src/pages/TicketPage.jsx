@@ -146,28 +146,6 @@ const TicketPage = () => {
                 </Col>
             </Row>
             <Table columns={columns} dataSource={data} pagination={false} />
-            {/* <Card title={ticketInfo.title}>
-                <p style={{ marginBottom: 16, marginTop: 0 }}>
-                    {ticketInfo.description}
-                </p>
-                <Card title="Comments">
-                    {ticketInfo.comments.map((comment, index) => (
-                        <Card key={index} type="inner" title={comment.created_by.name} style={{ marginBottom: 16 }}>
-                            <p>{comment.text}</p>
-                        </Card>
-                    ))}
-                    <Modal title="ثبت پاسخ جدید" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                        <p>متن پاسخ خود را وارد کنید.</p>
-                        <TextArea
-                            value={newCommentText}
-                            onChange={(e) => setNewCommentText(e.target.value)}
-                            showCount
-                            maxLength={500}
-                            // onChange={onChange}
-                            placeholder="متن پاسخ"
-                            style={{ height: 120, resize: 'none', marginBottom: 16 }}
-                        />
-                    </Modal> */}
             <Card title={ticketInfo.title}>
                 <p>{ticketInfo.description}</p>
                 <Card title="پاسخ به تیکت کاربر" style={{ backgroundColor: '#d9eaf7' }}>
