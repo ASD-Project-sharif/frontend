@@ -39,7 +39,7 @@ const TicketRegister = () => {
                 navigate("/user")
             }
         })();
-    }, [organizationName, navigate]);
+    }, [organizationName, navigate, state]);
 
     const onChange = (date, dateString) => {
         console.log(date, dateString);

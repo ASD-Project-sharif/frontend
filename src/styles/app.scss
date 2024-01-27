@@ -278,31 +278,15 @@ body {
     margin: auto;
   }
 
-  .indicator-col{
-    background: #e6e6e6;
-    padding: 1rem;
-    font-size: larger;
-    font-weight: 500;
-  }
-
-  .value-col{
-    background-color: #f0f0f0;
-    padding: 1rem;
-    font-size: medium;
-  }
-
-  .ticket-title{
-    display: flex;
-    justify-content: center;
+  .panel-header {
+    padding: 0px 30px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    display: flex; 
+    justify-content: space-between;
     align-items: center;
   }
 
-  .ticket-card{
-    margin: 1rem;
-  }
-
-  .ticket-owner{
-    color: blue;
-    font-size: medium;
-    font-weight: 500;
+  .ant-table-row{
+    cursor: pointer;
   }

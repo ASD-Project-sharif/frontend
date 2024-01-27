@@ -10,6 +10,10 @@ import UserPanel from './pages/UserPanel';
 import TicketRegister from './pages/TicketRegister';
 import TicketSubmitted from './pages/TicketSubmitted';
 import TicketPage from './pages/TicketPage';
+import NearDeadlinePage from './pages/NearDeadlinePage';
+import PassedDeadlinePage from './pages/PassedTicketsPage';
+import AgentsPage from './pages/AgentsPage';
+import AllUserTicketPage from './pages/AllUserTicketPage';
 
 
 (async function () {
@@ -22,14 +26,6 @@ import TicketPage from './pages/TicketPage';
 })();
 
 export const AuthContext = createContext();
-
-const initialState = {
-  isAuthenticated: !!localStorage.getItem("token"),
-  user: JSON.parse(localStorage.getItem("user")),
-  token: JSON.parse(localStorage.getItem("token")),
-  role: JSON.parse(localStorage.getItem("role")),
-  id: JSON.parse(localStorage.getItem("id"))
-};
 
 const reducer = (state, action) => {
   let token = null;
@@ -62,7 +58,30 @@ const reducer = (state, action) => {
 };
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const getInititalState = () => {
+    const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    const id = localStorage.getItem("id");
+    if (id && user && token && role) {
+      return {
+        isAuthenticated: true,
+        user: JSON.parse(user),
+        token: JSON.parse(token),
+        role: JSON.parse(role),
+        id: JSON.parse(id)
+      };
+    }
+
+    return {
+      isAuthenticated: false,
+      user: "",
+      token: "",
+      role: "",
+      id: ""
+    }
+  }
+  const [state, dispatch] = useReducer(reducer, getInititalState());
 
   const getPanel = () => {
     if (!state.isAuthenticated) {
@@ -90,6 +109,9 @@ function App() {
         >
           <Route index element={<AllTicketsPage />} />
           <Route path="/ticket/:ticketId" element={<TicketPage />} />
+          <Route path="/user/nearDeadline" element={<NearDeadlinePage />} />
+          <Route path="/user/passedDeadline" element={<PassedDeadlinePage />} />
+          <Route path="/user/agents" element={<AgentsPage />} />
         </Route>
       )
     } else {
@@ -100,7 +122,7 @@ function App() {
             <UserPanel />
           }
         >
-          <Route index element={<div>hi</div>} />
+          <Route index element={<AllUserTicketPage />} />
         </Route>
       )
 

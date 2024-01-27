@@ -38,14 +38,22 @@ const MenuCreator = () => {
                 </Menu.Item>
 
                 <Menu.Item
-                    key="/user/expired"
+                    key="/user/passedDeadline"
                     icon=""
                 >
-                    <Link to="/user/expired">ددلاین رد شده</Link>
+                    <Link to="/user/passedDeadline">ددلاین رد شده</Link>
 
                 </Menu.Item>
 
             </Menu.SubMenu>
+
+            <Menu.Item
+                key="/user/agents"
+                icon=""
+            >
+                <Link to="/user/agents">ایجنت‌ها</Link>
+
+            </Menu.Item>
 
             <Menu.Item
                 key="exit"
@@ -59,7 +67,6 @@ const MenuCreator = () => {
 
     const userMenu = (
         <>
-
             <Menu.Item
                 key="/user"
                 icon=""
