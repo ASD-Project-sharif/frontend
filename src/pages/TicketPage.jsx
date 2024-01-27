@@ -1,6 +1,7 @@
 import { Button, Col, Row, Table, Card, Flex, Modal, Input } from "antd";
 import { useState } from "react";
 import { redirect, useParams } from "react-router-dom";
+import { formatDate } from "../helper/strings";
 
 const ticketStatus = {
     "waiting_for_admin": "در انتظار اساین شدن",
@@ -29,7 +30,7 @@ const TicketPage = () => {
 
     const header = "تیکت" + ticketInfo.id;
     const agentName = ticketInfo.comments.length > 0 ? ticketInfo.comments[0].created_by.name : '';
-    const commentCreationTime = ticketInfo.comments.length > 0 ? ticketInfo.comments[0].created_at : '';
+    const commentCreationTime = ticketInfo.comments.length > 0 ? formatDate(ticketInfo.comments[0].created_at) : '';
     const commentHeader = agentName + "     " + commentCreationTime
     const comments = ticketInfo.comments.map((comment, index) => (
         <div key={index}>
@@ -69,10 +70,10 @@ const TicketPage = () => {
         {
             key: '1',
             sender: [ticketInfo.created_by.name],
-            send_time: [ticketInfo.created_at],
+            send_time: [formatDate(ticketInfo.created_at)],
             ticket_type: [ticketStatus[ticketInfo.status]],
             assigned_agent: [ticketInfo.asignee.name],
-            ticket_deadline: [ticketInfo.deadline]
+            ticket_deadline: [formatDate(ticketInfo.deadline)]
         }
     ];
 
@@ -146,11 +147,11 @@ const TicketPage = () => {
                 </Col>
             </Row>
             <Table columns={columns} dataSource={data} pagination={false} />
-            <Card title={ticketInfo.title}>
+            <Card title={ticketInfo.title} >
                 <p>{ticketInfo.description}</p>
-                <Card title="پاسخ به تیکت کاربر" style={{ backgroundColor: '#d9eaf7' }}>
+                <Card title="پاسخ به تیکت کاربر" classname="comment-card">
                     {ticketInfo.comments.map((comment, index) => (
-                        <Card key={index} type="inner" title={comment.created_by.name} style={{ marginBottom: 16 }}>
+                        <Card key={index} type="inner" title={comment.created_by.name} classname="ticket-card">
                             <p>{comment.text}</p>
                         </Card>
                     ))}
