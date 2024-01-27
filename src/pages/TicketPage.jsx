@@ -1,6 +1,6 @@
 import { Button, Col, Row, Table, Card, Flex, Modal, Input } from "antd";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { redirect, useParams } from "react-router-dom";
 
 const ticketStatus = {
     "waiting_for_admin": "در انتظار اساین شدن",
@@ -77,11 +77,29 @@ const TicketPage = () => {
     ];
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newCommentText, setNewCommentText] = useState('');
+
     const showModal = () => {
         setIsModalOpen(true);
     };
+
     const handleOk = () => {
+        const newComment = {
+            created_by: { name: "New Commenter", id: "99999" }, // Example: Replace with actual user info
+            created_at: new Date().toISOString(),
+            text: newCommentText,
+            updated_at: new Date().toISOString()
+        };
+
+        setTicketInfo(prevTicketInfo => ({
+            ...prevTicketInfo,
+            comments: [...prevTicketInfo.comments, newComment]
+        }));
+
+        console.log("Updated Comments:", [...ticketInfo.comments, newComment]);
+
         setIsModalOpen(false);
+        setNewCommentText(''); // Clear the text area after adding the comment
     };
 
     const handleCancel = () => {
@@ -128,24 +146,46 @@ const TicketPage = () => {
                 </Col>
             </Row>
             <Table columns={columns} dataSource={data} pagination={false} />
-            <Card title={ticketInfo.title}>
+            {/* <Card title={ticketInfo.title}>
                 <p style={{ marginBottom: 16, marginTop: 0 }}>
                     {ticketInfo.description}
                 </p>
-                <Card type="inner" title={commentHeader} style={{ marginBottom: 16 }} >
-                    {comments}
+                <Card title="Comments">
+                    {ticketInfo.comments.map((comment, index) => (
+                        <Card key={index} type="inner" title={comment.created_by.name} style={{ marginBottom: 16 }}>
+                            <p>{comment.text}</p>
+                        </Card>
+                    ))}
+                    <Modal title="ثبت پاسخ جدید" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                        <p>متن پاسخ خود را وارد کنید.</p>
+                        <TextArea
+                            value={newCommentText}
+                            onChange={(e) => setNewCommentText(e.target.value)}
+                            showCount
+                            maxLength={500}
+                            // onChange={onChange}
+                            placeholder="متن پاسخ"
+                            style={{ height: 120, resize: 'none', marginBottom: 16 }}
+                        />
+                    </Modal> */}
+            <Card title={ticketInfo.title}>
+                <p>{ticketInfo.description}</p>
+                <Card title="پاسخ به تیکت کاربر" style={{ backgroundColor: '#d9eaf7' }}>
+                    {ticketInfo.comments.map((comment, index) => (
+                        <Card key={index} type="inner" title={comment.created_by.name} style={{ marginBottom: 16 }}>
+                            <p>{comment.text}</p>
+                        </Card>
+                    ))}
+                    <Modal title="ثبت پاسخ جدید" visible={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                        <Input.TextArea
+                            value={newCommentText}
+                            onChange={(e) => setNewCommentText(e.target.value)}
+                            rows={4}
+                            placeholder="متن پاسخ"
+                        />
+                    </Modal>
                 </Card>
             </Card>
-            <Modal title="ثبت پاسخ جدید" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <p>متن پاسخ خود را وارد کنید.</p>
-                <TextArea
-                    showCount
-                    maxLength={500}
-                    // onChange={onChange}
-                    placeholder="متن پاسخ"
-                    style={{ height: 120, resize: 'none', marginBottom: 16 }}
-                />
-            </Modal>
         </div>
     )
 }
