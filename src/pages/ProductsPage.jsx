@@ -37,7 +37,7 @@ const ProductsPage = () => {
             }
             const headers = { "x-access-token": state.token }
             const response = await axios.get(
-                `${config.baseUrl}/api/v1/agents`,
+                `${config.baseUrl}/api/v1/product/organization`,
                 { headers: headers, params: data },
             );
             setLoading(false);

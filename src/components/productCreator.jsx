@@ -63,29 +63,7 @@ const ProductCreator = ({ getTickets }) => {
                 open={open}
                 onCancel={closeModal}
             >
-                <Form name="product" onFinish={submitProductForm}>
-                    <Form.Item
-                        name="name"
-                        rules={[
-                            { required: true, message: "لطفا نام محصول را وارد کنید." },
-                        ]}
-                    >
-                        <Input size="large" placeholder="نام محصول" />
-                    </Form.Item>
-                    <Form.Item
-                        name="description"
-                        rules={[
-                            { required: true, message: "لطفا توضیحات را وارد کنید." },
-                        ]}
-                    >
-                        <Input.TextArea size="large" placeholder="معرفی محصول" rows={4} />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button size="large" block type="primary" htmlType="submit" loading={loading}>
-                            افزودن
-                        </Button>
-                    </Form.Item>
-                </Form>
+
 
             </Modal>
         </>
