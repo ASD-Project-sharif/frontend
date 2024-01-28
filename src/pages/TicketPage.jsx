@@ -138,6 +138,7 @@ const TicketPage = () => {
             <Card title={ticketInfo.title} >
                 <p>{ticketInfo.description}</p>
                 <Card title="کامنت‌ها " className="comment-card">
+                    {comments.length===0 && " :( کامنتی موجود نیست"}
                     {comments.length > 0 && comments.map((comment, index)  => (
                         <Card key={index} type="inner" title={comment.created_by.username} className="ticket-card">
                             <p>{comment.text}</p>
