@@ -37,7 +37,7 @@ const TicketTable = ({ filter, deadlineStatus }) => {
                 }
                 const headers = { "x-access-token": state.token }
                 const response = await axios.get(
-                    `${config.baseUrl}/api/v1/ticket/organization`,
+                    `${config.baseUrl}/api/v1/ticket/organization/`,
                     { headers: headers, params: data },
                 );
                 setLoading(false);
