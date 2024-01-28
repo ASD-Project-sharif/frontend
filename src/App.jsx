@@ -108,7 +108,7 @@ function App() {
           }
         >
           <Route index element={<AllTicketsPage />} />
-          <Route path="/ticket/:ticketId" element={<TicketPage />} />
+          <Route path="/user/ticket/:ticketId" element={<TicketPage />} />
           <Route path="/user/nearDeadline" element={<NearDeadlinePage />} />
           <Route path="/user/passedDeadline" element={<PassedDeadlinePage />} />
           <Route path="/user/agents" element={<AgentsPage />} />
