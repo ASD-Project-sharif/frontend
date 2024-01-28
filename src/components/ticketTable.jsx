@@ -14,33 +14,7 @@ const TicketTable = ({ filter, deadlineStatus }) => {
     const pageSize = 20;
     const [sortOrder, setSortOrder] = useState("DESC");
     const [sortBy, setSortBy] = useState("created_at")
-    const [tickets, setTickets] = useState([{
-        "id": "123",
-        "user": "ali",
-        "title": "سلام",
-        "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-        "created_at": 1703613489000,
-        "status": "closed",
-        "deadlineStatus": "near"
-    },
-    {
-        "id": "123",
-        "title": "سلام",
-        "user": "ali",
-        "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-        "created_at": 1703613489000,
-        "status": "in_progress",
-        "deadlineStatus": "near"
-    },
-    {
-        "id": "123",
-        "title": "سلام",
-        "user": "ali",
-        "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-        "created_at": 1703613489000,
-        "status": "waiting_for_admin",
-        "deadlineStatus": "passed"
-    }]);
+    const [tickets, setTickets] = useState([]);
 
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState();
@@ -63,7 +37,7 @@ const TicketTable = ({ filter, deadlineStatus }) => {
                 }
                 const headers = { "x-access-token": state.token }
                 const response = await axios.get(
-                    `${config.baseUrl}/api/v1/ticket/organization/${state.id}`,
+                    `${config.baseUrl}/api/v1/ticket/organization/`,
                     { headers: headers, params: data },
                 );
                 setLoading(false);
@@ -158,7 +132,8 @@ const TicketTable = ({ filter, deadlineStatus }) => {
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            navigate(`/ticket/${record.id}`)
+                            console.log(record)
+                            navigate(`ticket/${record._id}`)
                         },
                     };
                 }}
