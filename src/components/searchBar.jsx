@@ -12,29 +12,6 @@ const renderTitle = (title) => (
     </h3>
 );
 
-
-
-const items = [{
-    "id": "123",
-    "user": "ali",
-    "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-    "created_at": 1703613489000,
-    "status": "open",
-    "title": "ali",
-    "deadlineStatus": "near"
-},
-{
-    "id": "123",
-    "user": "ali",
-    "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-    "created_at": 1703613489000,
-    "status": "open",
-    "title": "gholam",
-    "deadlineStatus": "passed"
-}];
-
-
-
 const SearchBar = () => {
     const [options, setOptions] = useState([]);
     const { state } = useContext(AuthContext);
@@ -49,34 +26,22 @@ const SearchBar = () => {
             </div>
         ),
     });
-    const selectedOptions = [
-        {
-            label: renderTitle('تیکت‌ها با بیشترین تطابق'),
-            options: items.map(item => renderItem(item)),
-        },
-    ];
 
     const handleChange = async (e) => {
         const searchInput = e.target.value;
         if (searchInput === "") {
             setOptions([]);
         } else {
-            // const data = {
-            //     text: searchInput
-            // }
-            // const headers = { "x-access-token": state.token }
-            // const response = await axios.get(
-            //     `${config.baseUrl}/api/v1/search`,
-            //     { headers: headers, params: data },
-            // );
-            // const options = [{
-            //     label: renderTitle('تیکت‌ها با بیشترین تطابق'),
-            //     options: response.data.tickets.map(item => renderItem(item)),
-            // }];
-
-            // setOptions(options);
-
-            setOptions(selectedOptions);
+            const headers = { "x-access-token": state.token }
+            const response = await axios.get(
+                `${config.baseUrl}/api/v1/ticket/search/${searchInput}`,
+                { headers: headers },
+            );
+            const options = [{
+                label: renderTitle('تیکت‌ها با بیشترین تطابق'),
+                options: response.data.tickets.map(item => renderItem(item)),
+            }];
+            setOptions(options);
         }
     }
     return (
