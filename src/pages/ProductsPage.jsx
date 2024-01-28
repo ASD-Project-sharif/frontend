@@ -1,12 +1,13 @@
-import { Table, message, theme } from "antd";
+import { Avatar, Table, message, theme } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../App";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import config from "../config/config";
 import { Header } from "antd/es/layout/layout";
 import { sliceText } from "../helper/strings";
 import ProductCreator from "../components/productCreator";
+import { CloudUploadOutlined } from '@ant-design/icons';
+import ProductDetail from "../components/productDetail";
 
 const ProductsPage = () => {
     const {
@@ -14,13 +15,17 @@ const ProductsPage = () => {
     } = theme.useToken();
     const { state } = useContext(AuthContext);
     const [messageApi, contextHolder] = message.useMessage();
-    const navigate = useNavigate();
 
     const pageSize = 20;
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState();
     const [loading, setLoading] = useState(false);
-    const [products, setProducts] = useState([{ "id": 1, "name": "غلامعلی", "description": "این محصول لین محصول میتواندییی تسادف تیتیتن" }]);
+    const [products, setProducts] = useState([
+        { "id": 1, "name": "غلامعلی", "description": "این محصول لین محصول میتواندییی تسادف تیتیتن" },
+        { "id": 1, "name": "غلامعلی", "description": "این محصول لین محصول میتواندییی تسادف تیتیتن", "image": "https://dkstatics-public.digikala.com/digikala-products/727d1cda829f06559649634c9bc27f742ecefd93_1685250629.jpg?x-oss-process=image/resize,m_lfit,h_800,w_800/format,webp/quality,q_90" }]);
+
+    const [visible, setVisible] = useState(false);
+    const [selected, setSelected] = useState({});
 
     const getProducts = async () => {
         try {
@@ -57,6 +62,19 @@ const ProductsPage = () => {
 
     const columns = [
         {
+            title: ' ',
+            dataIndex: 'id',
+            render: (value, record) => {
+                if (!record.image) {
+                    return (
+                        <Avatar icon={<CloudUploadOutlined />} size={48} shape="square" />
+                    );
+                } else {
+                    return <Avatar src={record.image} size={48} shape="square" />;
+                }
+            },
+        },
+        {
             title: 'نام محصول',
             dataIndex: 'name',
             render: (value) => value
@@ -66,6 +84,7 @@ const ProductsPage = () => {
             dataIndex: 'description',
             render: (value) => sliceText(value),
         },
+
     ];
     return (
         <div>
@@ -80,7 +99,8 @@ const ProductsPage = () => {
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            navigate(`/ticket/${record.id}`)
+                            setSelected(record);
+                            setVisible(true);
                         },
                     };
                 }}
@@ -96,6 +116,11 @@ const ProductsPage = () => {
                         setPage(page);
                     },
                 }}
+            />
+            <ProductDetail
+                visible={visible}
+                setVisible={setVisible}
+                selected={selected}
             />
         </div>
     )
