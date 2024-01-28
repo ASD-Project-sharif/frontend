@@ -10,6 +10,7 @@ const ProductDetail = ({ setVisible, visible, selected, getProducts }) => {
     const { state } = useContext(AuthContext);
     const [messageApi, contextHolder] = message.useMessage();
 
+    const baseUrl = window.location.protocol + "//" + window.location.host;
 
     const updateButton = (
         <UpdateProduct key="update" product={selected} setDrawerVisibility={setVisible} getProducts={getProducts} />
@@ -73,8 +74,8 @@ const ProductDetail = ({ setVisible, visible, selected, getProducts }) => {
                                         <Descriptions.Item label="عنوان">
                                             {selected.name}
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="لینک">
-
+                                        <Descriptions.Item label="لینک محصول">
+                                            {`${baseUrl}/${selected._id}`}
                                         </Descriptions.Item>
                                     </Descriptions>
                                     <br />
