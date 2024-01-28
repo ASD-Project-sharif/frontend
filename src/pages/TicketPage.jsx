@@ -1,16 +1,11 @@
-import { Button, Col, Row, Table, Card, Flex, Modal, Input, message } from "antd";
+import { Button, Col, Row, Card, Flex, Modal, Input, message } from "antd";
 import { useContext, useEffect, useState } from "react";
-import { redirect, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { formatDate } from "../helper/strings";
 import { AuthContext } from "../App";
 import axios from "axios";
 import config from "../config/config";
-
-const ticketStatus = {
-    "waiting_for_admin": "در انتظار اساین شدن",
-    "closed": "بسته شده",
-    "in_progress": "در جریان",
-}
+import TicketInfoTable from "../components/ticketInfoTable";
 
 const TicketPage = () => {
 
@@ -33,6 +28,10 @@ const TicketPage = () => {
         "updated_at": "2024-01-02T22:20:57.390+00:00",
         "comments": [{ "created_by": { "username": "ممد", "_id": "0098" }, "created_at": "2024-01-02T22:20:57.390+00:00", "text": "نمیدانم به مولا", "updated_at": "2024-01-02T22:20:57.390+00:00" }],
     });
+
+    const[comments, setComments] =useState ({
+
+    })
     
     useEffect(() => {
         (async () => {
@@ -46,13 +45,14 @@ const TicketPage = () => {
                 console.log(response.data.ticket)
                 setLoading(false);
                 setTicketInfo(response.data.ticket);
+                setComments(response.data.comments)
             } catch (error) {
                 setLoading(false);
                 errorMessage(error);
             }
         })();
 
-    });
+    },[]);
 
     const errorMessage = (error) => {
         messageApi.open({
@@ -61,57 +61,13 @@ const TicketPage = () => {
         });
     };
 
-   
-
     const header = "تیکت" + ticketInfo._id;
-    const agentName =ticketInfo.comments && ticketInfo.comments.length > 0 ? ticketInfo.comments[0].created_by.username : '';
-    const commentCreationTime =ticketInfo.comments && ticketInfo.comments.length > 0 ? formatDate(ticketInfo.comments[0].created_at) : '';
-    const commentHeader = agentName + "     " + commentCreationTime
-    const comments = ticketInfo.comments && ticketInfo.comments.map((comment, index) => (
-        <div key={index}>
-            <p>{comment.text}</p>
-        </div>
-    ));
+    // const agentName =comments && comments.length > 0 ? comments[0].created_by.username : '';
+    // const commentCreationTime =comments && comments.length > 0 ? formatDate(ticketInfo.comments[0].created_at) : '';
+    // const commentHeader = agentName + "     " + commentCreationTime
 
-    const columns = [
-        {
-            title: 'فرستنده',
-            dataIndex: 'sender',
-            key: 'sender',
-        },
-        {
-            title: 'زمان ارسال',
-            dataIndex: 'send_time',
-            key: 'send_time',
-        },
-        {
-            title: 'نوع تیکت',
-            dataIndex: 'ticket_type',
-            key: 'ticket-type',
-        },
-        {
-            title: 'ایجنت مربوطه ',
-            dataIndex: 'assigned_agent',
-            key: 'assigned_agent',
-        },
-        {
-            title: 'ددلاین پاسخگویی',
-            key: 'ticket_deadline',
-            dataIndex: 'ticket_deadline',
-        },
-    ];
 
-    const data = [
-        {
-            key: '1',
-            sender: [ticketInfo.created_by.username],
-            send_time: [formatDate(ticketInfo.created_at)],
-            ticket_type: [ticketStatus[ticketInfo.status]],
-            assigned_agent: [ticketInfo.assignee.username],
-            ticket_deadline: [formatDate(ticketInfo.deadline)]
-        }
-    ];
-
+   
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newCommentText, setNewCommentText] = useState('');
 
@@ -135,16 +91,12 @@ const TicketPage = () => {
         console.log("Updated Comments:", [...ticketInfo.comments, newComment]);
 
         setIsModalOpen(false);
-        setNewCommentText(''); // Clear the text area after adding the comment
+        setNewCommentText('');
     };
 
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-
-    // const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    //     console.log('Change:', e.target.value);
-    //   };
 
     const { TextArea } = Input;
 
@@ -182,12 +134,12 @@ const TicketPage = () => {
                     </Flex>
                 </Col>
             </Row>
-            <Table columns={columns} dataSource={data} pagination={false} />
+            <TicketInfoTable ticketInfo={ticketInfo}/>
             <Card title={ticketInfo.title} >
                 <p>{ticketInfo.description}</p>
-                <Card title="پاسخ به تیکت کاربر" classname="comment-card">
-                    {ticketInfo.comments && ticketInfo.comments.map((comment, index) => (
-                        <Card key={index} type="inner" title={comment.created_by.username} classname="ticket-card">
+                <Card title="کامنت‌ها " className="comment-card">
+                    {comments.length > 0 && comments.map((comment, index)  => (
+                        <Card key={index} type="inner" title={comment.created_by.username} className="ticket-card">
                             <p>{comment.text}</p>
                         </Card>
                     ))}

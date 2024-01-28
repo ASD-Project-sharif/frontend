@@ -132,7 +132,6 @@ const TicketTable = ({ filter, deadlineStatus }) => {
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            console.log(record)
                             navigate(`ticket/${record._id}`)
                         },
                     };
