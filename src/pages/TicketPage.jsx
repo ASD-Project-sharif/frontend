@@ -1,11 +1,11 @@
-import { Button, Col, Row, Card, Flex, Modal, Input, message } from "antd";
+import { Button, Col, Row, Card, Flex, message } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { formatDate } from "../helper/strings";
 import { AuthContext } from "../App";
 import axios from "axios";
 import config from "../config/config";
 import TicketInfoTable from "../components/ticketInfoTable";
+import CommentModal from "../components/commentModal";
 
 const TicketPage = () => {
 
@@ -29,10 +29,8 @@ const TicketPage = () => {
         "comments": [{ "created_by": { "username": "ممد", "_id": "0098" }, "created_at": "2024-01-02T22:20:57.390+00:00", "text": "نمیدانم به مولا", "updated_at": "2024-01-02T22:20:57.390+00:00" }],
     });
 
-    const[comments, setComments] =useState ({
+    const [comments, setComments] = useState({})
 
-    })
-    
     useEffect(() => {
         (async () => {
             try {
@@ -52,7 +50,7 @@ const TicketPage = () => {
             }
         })();
 
-    },[]);
+    }, []);
 
     const errorMessage = (error) => {
         messageApi.open({
@@ -61,58 +59,70 @@ const TicketPage = () => {
         });
     };
 
-    const header = "تیکت" + ticketInfo._id;
+    const [loadingChangeStatus, setLoadingChangeStatus] = useState(false);
+
+    const toggleTicketStatus = async () => {
+        setLoadingChangeStatus(true);
+        try {
+            const headers = { "x-access-token": state.token }
+            const data = {
+                open: ticketInfo.status === "closed" ? true : false
+            }
+            await axios.post(
+                `${config.baseUrl}/api/v1/ticket/change/status/${ticketInfo._id}`,
+                data,
+                { headers: headers }
+            );
+
+            const newStatus = ticketInfo.status === "closed" ? "in_progress" : "closed";
+            setTicketInfo({
+                ...ticketInfo,
+                status: newStatus,
+            });
+            setLoadingChangeStatus(false);
+        } catch (error) {
+            errorMessage(error);
+            setLoadingChangeStatus(false);
+        }
+    }
+
+    const header = "تیکت" + " " + ticketInfo._id;
     // const agentName =comments && comments.length > 0 ? comments[0].created_by.username : '';
     // const commentCreationTime =comments && comments.length > 0 ? formatDate(ticketInfo.comments[0].created_at) : '';
     // const commentHeader = agentName + "     " + commentCreationTime
 
 
-   
+
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [newCommentText, setNewCommentText] = useState('');
 
     const showModal = () => {
         setIsModalOpen(true);
     };
 
-    const handleOk = () => {
+    const handleOk = async (value) => {
         const newComment = {
-            created_by: { username: "New Commenter", _id: "99999" }, // Example: Replace with actual user info
+            created_by: { username: state.user, _id: state.id }, // Example: Replace with actual user info
             created_at: new Date().toISOString(),
-            text: newCommentText,
+            text: value,
             updated_at: new Date().toISOString()
         };
 
-        setTicketInfo(prevTicketInfo => ({
-            ...prevTicketInfo,
-            comments: [...prevTicketInfo.comments, newComment]
-        }));
-
-        console.log("Updated Comments:", [...ticketInfo.comments, newComment]);
-
-        setIsModalOpen(false);
-        setNewCommentText('');
+        try {
+            const headers = { "x-access-token": state.token }
+            const data = {
+                text: value
+            }
+            await axios.post(
+                `${config.baseUrl}/api/v1/comment/add/${ticketInfo._id}`,
+                data,
+                { headers: headers }
+            );
+            setComments(prevComments => [...prevComments, newComment]);
+            setIsModalOpen(false);
+        } catch (error) {
+            errorMessage(error);
+        }
     };
-
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
-
-    const { TextArea } = Input;
-
-    const [isOpen, setIsOpen] = useState(false);
-
-    const toggleTicketStatus = () => {
-        setIsOpen(!isOpen);
-        const newStatus = ticketInfo.status === "closed" ? "in_progress" : "closed";
-        setTicketInfo({
-            ...ticketInfo,
-            status: newStatus,
-        });
-        console.log(ticketInfo.status);
-    };
-
-
 
     return (
         <>
@@ -128,32 +138,28 @@ const TicketPage = () => {
                         <Button size="large" block type="primary" onClick={showModal}>
                             ثبت پاسخ جدید
                         </Button>
-                        <Button size="large" block type="default" htmlType="submit" onClick={toggleTicketStatus} className={ticketInfo.status === 'in_progress' ? 'primary' : 'destructive'}>
-                            {ticketInfo.status === 'in_progress' ? 'باز کردن تیکت' : 'بستن تیکت'}
+                        <Button size="large" block type="default" loading={loadingChangeStatus} onClick={toggleTicketStatus} className={ticketInfo.status === 'in_progress' ? 'primary' : 'destructive'}>
+                            {ticketInfo.status === 'closed' ? 'باز کردن تیکت' : 'بستن تیکت'}
                         </Button>
                     </Flex>
                 </Col>
             </Row>
-            <TicketInfoTable ticketInfo={ticketInfo}/>
+            <TicketInfoTable ticketInfo={ticketInfo} />
             <Card title={ticketInfo.title} >
                 <p>{ticketInfo.description}</p>
                 <Card title="کامنت‌ها " className="comment-card">
-                    {comments.length===0 && " :( کامنتی موجود نیست"}
-                    {comments.length > 0 && comments.map((comment, index)  => (
+                    {comments.length === 0 && " :( کامنتی موجود نیست"}
+                    {comments.length > 0 && comments.map((comment, index) => (
                         <Card key={index} type="inner" title={comment.created_by.username} className="ticket-card">
                             <p>{comment.text}</p>
                         </Card>
                     ))}
-                    <Modal title="ثبت پاسخ جدید" visible={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                        <Input.TextArea
-                            value={newCommentText}
-                            onChange={(e) => setNewCommentText(e.target.value)}
-                            rows={4}
-                            placeholder="متن پاسخ"
-                        />
-                    </Modal>
+
                 </Card>
             </Card>
+
+            <CommentModal handleSubmit={handleOk} title='ثبت پاسخ جدید' open={isModalOpen} setOpen={setIsModalOpen} />
+
         </>
     )
 }
