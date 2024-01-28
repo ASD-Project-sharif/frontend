@@ -1,7 +1,10 @@
-import { Button, Col, Row, Table, Card, Flex, Modal, Input } from "antd";
-import { useState } from "react";
+import { Button, Col, Row, Table, Card, Flex, Modal, Input, message } from "antd";
+import { useContext, useEffect, useState } from "react";
 import { redirect, useParams } from "react-router-dom";
 import { formatDate } from "../helper/strings";
+import { AuthContext } from "../App";
+import axios from "axios";
+import config from "../config/config";
 
 const ticketStatus = {
     "waiting_for_admin": "در انتظار اساین شدن",
@@ -12,27 +15,59 @@ const ticketStatus = {
 const TicketPage = () => {
 
     const { ticketId } = useParams();
+    const [loading, setLoading] = useState(false);
+    const { state } = useContext(AuthContext);
+    const [messageApi, contextHolder] = message.useMessage();
 
     const [ticketInfo, setTicketInfo] = useState({
-        "id": "110011",
+        "_id": "110011",
         "title": "کند شدن تیغه مخلوط‌کن",
         "description": "تیغه مخلوط‌کن من کند شده الان باید چیکار کنم؟",
-        "created_by": { "name": "غلام" },
-        "asignee": { "name": "پاسخگوی ۱۱" },
+        "created_by": { "username": "غلام" },
+        "assignee": { "username": "پاسخگوی ۱۱" },
         "organization": { "name": "پارس خزر" },
         "status": "waiting_for_admin",
         "type": "bug",
         "deadline": "2024-01-22T22:20:57.390+00:00",
         "created_at": "2024-01-01T22:20:57.390+00:00",
         "updated_at": "2024-01-02T22:20:57.390+00:00",
-        "comments": [{ "created_by": { "name": "ممد", "id": "0098" }, "created_at": "2024-01-02T22:20:57.390+00:00", "text": "نمیدانم به مولا", "updated_at": "2024-01-02T22:20:57.390+00:00" }],
+        "comments": [{ "created_by": { "username": "ممد", "_id": "0098" }, "created_at": "2024-01-02T22:20:57.390+00:00", "text": "نمیدانم به مولا", "updated_at": "2024-01-02T22:20:57.390+00:00" }],
+    });
+    
+    useEffect(() => {
+        (async () => {
+            try {
+                setLoading(true);
+                const headers = { "x-access-token": state.token }
+                const response = await axios.get(
+                    `${config.baseUrl}/api/v1/ticket/${ticketId}`,
+                    { headers: headers },
+                );
+                console.log(response.data.ticket)
+                setLoading(false);
+                setTicketInfo(response.data.ticket);
+            } catch (error) {
+                setLoading(false);
+                errorMessage(error);
+            }
+        })();
+
     });
 
-    const header = "تیکت" + ticketInfo.id;
-    const agentName = ticketInfo.comments.length > 0 ? ticketInfo.comments[0].created_by.name : '';
-    const commentCreationTime = ticketInfo.comments.length > 0 ? formatDate(ticketInfo.comments[0].created_at) : '';
+    const errorMessage = (error) => {
+        messageApi.open({
+            type: "error",
+            content: error.response.data.message,
+        });
+    };
+
+   
+
+    const header = "تیکت" + ticketInfo._id;
+    const agentName =ticketInfo.comments && ticketInfo.comments.length > 0 ? ticketInfo.comments[0].created_by.username : '';
+    const commentCreationTime =ticketInfo.comments && ticketInfo.comments.length > 0 ? formatDate(ticketInfo.comments[0].created_at) : '';
     const commentHeader = agentName + "     " + commentCreationTime
-    const comments = ticketInfo.comments.map((comment, index) => (
+    const comments = ticketInfo.comments && ticketInfo.comments.map((comment, index) => (
         <div key={index}>
             <p>{comment.text}</p>
         </div>
@@ -69,10 +104,10 @@ const TicketPage = () => {
     const data = [
         {
             key: '1',
-            sender: [ticketInfo.created_by.name],
+            sender: [ticketInfo.created_by.username],
             send_time: [formatDate(ticketInfo.created_at)],
             ticket_type: [ticketStatus[ticketInfo.status]],
-            assigned_agent: [ticketInfo.asignee.name],
+            assigned_agent: [ticketInfo.assignee.username],
             ticket_deadline: [formatDate(ticketInfo.deadline)]
         }
     ];
@@ -86,7 +121,7 @@ const TicketPage = () => {
 
     const handleOk = () => {
         const newComment = {
-            created_by: { name: "New Commenter", id: "99999" }, // Example: Replace with actual user info
+            created_by: { username: "New Commenter", _id: "99999" }, // Example: Replace with actual user info
             created_at: new Date().toISOString(),
             text: newCommentText,
             updated_at: new Date().toISOString()
@@ -128,7 +163,8 @@ const TicketPage = () => {
 
 
     return (
-        <div>
+        <>
+            {contextHolder}
             <Row>
                 <Col span={16}>
                     <h1>
@@ -150,8 +186,8 @@ const TicketPage = () => {
             <Card title={ticketInfo.title} >
                 <p>{ticketInfo.description}</p>
                 <Card title="پاسخ به تیکت کاربر" classname="comment-card">
-                    {ticketInfo.comments.map((comment, index) => (
-                        <Card key={index} type="inner" title={comment.created_by.name} classname="ticket-card">
+                    {ticketInfo.comments && ticketInfo.comments.map((comment, index) => (
+                        <Card key={index} type="inner" title={comment.created_by.username} classname="ticket-card">
                             <p>{comment.text}</p>
                         </Card>
                     ))}
@@ -165,7 +201,7 @@ const TicketPage = () => {
                     </Modal>
                 </Card>
             </Card>
-        </div>
+        </>
     )
 }
 
