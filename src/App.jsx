@@ -26,14 +26,6 @@ import AllUserTicketPage from './pages/AllUserTicketPage';
 
 export const AuthContext = createContext();
 
-const initialState = {
-  isAuthenticated: !!localStorage.getItem("token"),
-  user: JSON.parse(localStorage.getItem("user")),
-  token: JSON.parse(localStorage.getItem("token")),
-  role: JSON.parse(localStorage.getItem("role")),
-  id: JSON.parse(localStorage.getItem("id"))
-};
-
 const reducer = (state, action) => {
   let token = null;
   switch (action.type) {
@@ -65,7 +57,30 @@ const reducer = (state, action) => {
 };
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const getInititalState = () => {
+    const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    const id = localStorage.getItem("id");
+    if (id && user && token && role) {
+      return {
+        isAuthenticated: true,
+        user: JSON.parse(user),
+        token: JSON.parse(token),
+        role: JSON.parse(role),
+        id: JSON.parse(id)
+      };
+    }
+
+    return {
+      isAuthenticated: false,
+      user: "",
+      token: "",
+      role: "",
+      id: ""
+    }
+  }
+  const [state, dispatch] = useReducer(reducer, getInititalState());
 
   const getPanel = () => {
     if (!state.isAuthenticated) {

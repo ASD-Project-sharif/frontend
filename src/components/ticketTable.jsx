@@ -17,17 +17,28 @@ const TicketTable = ({ filter, deadlineStatus }) => {
     const [tickets, setTickets] = useState([{
         "id": "123",
         "user": "ali",
+        "title": "سلام",
         "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
         "created_at": 1703613489000,
-        "status": "open",
+        "status": "closed",
         "deadlineStatus": "near"
     },
     {
         "id": "123",
+        "title": "سلام",
         "user": "ali",
         "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
         "created_at": 1703613489000,
-        "status": "open",
+        "status": "in_progress",
+        "deadlineStatus": "near"
+    },
+    {
+        "id": "123",
+        "title": "سلام",
+        "user": "ali",
+        "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
+        "created_at": 1703613489000,
+        "status": "waiting_for_admin",
         "deadlineStatus": "passed"
     }]);
 
@@ -83,12 +94,25 @@ const TicketTable = ({ filter, deadlineStatus }) => {
             render: (value) => value
         },
         {
+            title: 'عنوان',
+            dataIndex: 'title',
+            render: (value) => sliceText(value, 15),
+        },
+        {
             title: 'وضعیت',
             dataIndex: 'status',
             // sorter: (a, b, sortOrder) => {
             //     sorter('status', sortOrder);
             // },
-            render: (value) => value,
+            render: (value) => {
+                if (value === "closed") {
+                    return <Tag color="#87d068">بسته شده</Tag>
+                } else if (value === "in_progress") {
+                    return <Tag color="#2db7f5">در جریان</Tag>
+                } else if (value === "waiting_for_admin") {
+                    return <Tag color="#f50">منتظر ادمین</Tag>
+                }
+            }
         },
         {
             title: 'وضعیت ددلاین',
