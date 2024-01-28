@@ -30,7 +30,7 @@ const AgentCreator = ({ getAgents }) => {
             );
             setLoading(false);
             form.resetFields();
-            getAgents();
+            await getAgents();
             closeModal();
         } catch (error) {
             errorMessage(error);

@@ -48,6 +48,14 @@ const MenuCreator = () => {
             </Menu.SubMenu>
 
             <Menu.Item
+                key="/user/products"
+                icon=""
+            >
+                <Link to="/user/products">محصولات</Link>
+
+            </Menu.Item>
+
+            <Menu.Item
                 key="/user/agents"
                 icon=""
             >
@@ -87,7 +95,6 @@ const MenuCreator = () => {
     return (
         <Menu selectedKeys={[location.pathname]} mode="inline" defaultOpenKeys={[location.pathname]}>
             {state.role === "ROLE_USER" ? userMenu : orgnaizationMenu}
-
         </Menu>
     )
 }
