@@ -5,7 +5,7 @@ const ProductForm = ({ initialValues = {}, closeModal, onReturnForm }) => {
     const [form] = Form.useForm();
 
     async function submit(values) {
-        await onReturnForm(values);
+        onReturnForm(values);
         form.resetFields();
         closeModal();
     }
@@ -33,7 +33,7 @@ const ProductForm = ({ initialValues = {}, closeModal, onReturnForm }) => {
                 <Input.TextArea size="large" placeholder="معرفی محصول" rows={4} />
             </Form.Item>
             <Form.Item>
-                <Button size="large" block type="primary" htmlType="submit" loading={loading}>
+                <Button size="large" block type="primary" htmlType="submit">
                     افزودن
                 </Button>
             </Form.Item>

@@ -95,7 +95,6 @@ const MenuCreator = () => {
     return (
         <Menu selectedKeys={[location.pathname]} mode="inline" defaultOpenKeys={[location.pathname]}>
             {state.role === "ROLE_USER" ? userMenu : orgnaizationMenu}
-
         </Menu>
     )
 }

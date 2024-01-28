@@ -1,17 +1,15 @@
-import { Button, Form, Input, Modal, message } from "antd";
+import { Button, Form, Modal, message } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import { useContext, useState } from "react";
 import axios from "axios";
 import config from "../config/config";
 import { AuthContext } from "../App";
+import ProductForm from "./productForm";
 
-const ProductCreator = ({ getTickets }) => {
+const ProductCreator = ({ getProducts }) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
     const { state } = useContext(AuthContext);
-
-    const [form] = Form.useForm();
 
     const openModal = () => {
         setOpen(true);
@@ -22,7 +20,6 @@ const ProductCreator = ({ getTickets }) => {
     }
 
     const submitProductForm = async (values) => {
-        setLoading(true);
         try {
             const headers = { "x-access-token": state.token }
             await axios.post(
@@ -32,13 +29,10 @@ const ProductCreator = ({ getTickets }) => {
                 },
                 { headers: headers },
             );
-            setLoading(false);
-            form.resetFields();
             closeModal();
-            await getTickets();
+            await getProducts();
         } catch (error) {
             errorMessage(error);
-            setLoading(false);
         }
     }
 
@@ -63,8 +57,7 @@ const ProductCreator = ({ getTickets }) => {
                 open={open}
                 onCancel={closeModal}
             >
-
-
+                <ProductForm closeModal={closeModal} onReturnForm={submitProductForm} />
             </Modal>
         </>
 

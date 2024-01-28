@@ -20,9 +20,7 @@ const ProductsPage = () => {
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState();
     const [loading, setLoading] = useState(false);
-    const [products, setProducts] = useState([
-        { "id": 1, "name": "غلامعلی", "description": "این محصول لین محصول میتواندییی تسادف تیتیتن" },
-        { "id": 1, "name": "غلامعلی", "description": "این محصول لین محصول میتواندییی تسادف تیتیتن", "image": "https://dkstatics-public.digikala.com/digikala-products/727d1cda829f06559649634c9bc27f742ecefd93_1685250629.jpg?x-oss-process=image/resize,m_lfit,h_800,w_800/format,webp/quality,q_90" }]);
+    const [products, setProducts] = useState([]);
 
     const [visible, setVisible] = useState(false);
     const [selected, setSelected] = useState({});
@@ -58,7 +56,7 @@ const ProductsPage = () => {
 
     useEffect(() => {
         getProducts();
-    });
+    }, []);
 
     const columns = [
         {
@@ -93,7 +91,7 @@ const ProductsPage = () => {
                 <h3>
                     محصولات
                 </h3>
-                <ProductCreator />
+                <ProductCreator getProducts={getProducts} />
             </Header>
             <Table
                 onRow={(record) => {
@@ -119,6 +117,7 @@ const ProductsPage = () => {
             />
             <ProductDetail
                 visible={visible}
+                getProducts={getProducts}
                 setVisible={setVisible}
                 selected={selected}
             />
