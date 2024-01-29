@@ -3,12 +3,6 @@ import { formatDate } from "../helper/strings";
 
 const TicketInfoTable = ({ticketInfo}) => {
 
-    const ticketStatus = {
-        "waiting_for_admin": "در انتظار اساین شدن",
-        "closed": "بسته شده",
-        "in_progress": "در جریان",
-    }
-
     const columns = [
         {
             title: 'فرستنده',
