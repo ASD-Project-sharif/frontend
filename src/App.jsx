@@ -101,7 +101,7 @@ function App() {
       )
     }
     console.log(state.role)
-    if (state.role === "ROLE_ADMIN" || state.role === "ROLE_AGENT") {
+    if (state.role === "ROLE_ADMIN") {
       return (
         <Route
           path="/user"
@@ -115,6 +115,20 @@ function App() {
           <Route path="/user/passedDeadline" element={<PassedDeadlinePage />} />
           <Route path="/user/agents" element={<AgentsPage />} />
           <Route path="/user/products" element={<ProductsPage />} />
+        </Route>
+      )
+    } else if (state.role === "ROLE_AGENT") {
+      return (
+        <Route
+          path="/user"
+          element={
+            <OrganizationPanel />
+          }
+        >
+          <Route index element={<AllTicketsPage />} />
+          <Route path="/user/ticket/:ticketId" element={<TicketPage />} />
+          <Route path="/user/nearDeadline" element={<NearDeadlinePage />} />
+          <Route path="/user/passedDeadline" element={<PassedDeadlinePage />} />
         </Route>
       )
     } else {
