@@ -6,6 +6,7 @@ import axios from "axios";
 import config from "../config/config";
 import TicketInfoTable from "../components/ticketInfoTable";
 import CommentModal from "../components/commentModal";
+import SelectAssign from "../components/selectAssign";
 
 const TicketPage = () => {
 
@@ -164,7 +165,12 @@ const TicketPage = () => {
                             {ticketInfo.status === 'closed' ? 'باز کردن تیکت' : 'بستن تیکت'}
                         </Button>
                     </Flex>
+
                 </Col>
+                <Col>
+                    <SelectAssign getTicket={getTicket} ticket={ticketInfo} />
+                </Col>
+
             </Row>
             <TicketInfoTable ticketInfo={ticketInfo} />
             <Card title={ticketInfo.title} >
