@@ -1,14 +1,7 @@
 import { Table, Tag } from "antd";
 import { formatDate } from "../helper/strings";
 
-const TicketInfoTable = ({ticketInfo}) => {
-
-    const ticketStatus = {
-        "waiting_for_admin": "در انتظار اساین شدن",
-        "closed": "بسته شده",
-        "in_progress": "در جریان",
-    }
-
+const TicketInfoTable = ({ ticketInfo }) => {
     const columns = [
         {
             title: 'فرستنده',
@@ -59,6 +52,11 @@ const TicketInfoTable = ({ticketInfo}) => {
             key: 'ticket_deadline',
             dataIndex: 'ticket_deadline',
         },
+        {
+            title: 'محصول',
+            key: 'product_name',
+            dataIndex: 'product_name'
+        }
     ];
 
     const data = [
@@ -69,10 +67,11 @@ const TicketInfoTable = ({ticketInfo}) => {
             ticket_type: ticketInfo.type,
             ticket_status: ticketInfo.status,
             assigned_agent: ticketInfo.assignee.username,
-            ticket_deadline: formatDate(ticketInfo.deadline)
+            ticket_deadline: formatDate(ticketInfo.deadline),
+            product_name: ticketInfo.product?.name
         }
     ];
 
-    return(   <Table columns={columns} dataSource={data} pagination={false} />) 
+    return (<Table columns={columns} dataSource={data} pagination={false} />)
 }
 export default TicketInfoTable;

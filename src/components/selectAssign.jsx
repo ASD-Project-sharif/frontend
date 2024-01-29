@@ -11,14 +11,10 @@ const SelectAssign = ({ ticket, getTicket }) => {
     const [messageApi, contextHolder] = message.useMessage();
     const getAgents = async () => {
         try {
-            const data = {
-
-
-            }
             const headers = { "x-access-token": state.token }
             const response = await axios.get(
                 `${config.baseUrl}/api/v1/agent`,
-                { headers: headers, params: data },
+                { headers: headers },
             );
             setAgents(response.data.agents);
         } catch (error) {

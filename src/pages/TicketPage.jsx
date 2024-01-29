@@ -97,13 +97,6 @@ const TicketPage = () => {
     };
 
     const handleOk = async (value) => {
-        const newComment = {
-            created_by: { username: state.user, _id: state.id }, // Example: Replace with actual user info
-            created_at: new Date().toISOString(),
-            text: value,
-            updated_at: new Date().toISOString()
-        };
-
         try {
             const headers = { "x-access-token": state.token }
             const data = {
@@ -114,7 +107,7 @@ const TicketPage = () => {
                 data,
                 { headers: headers }
             );
-            setComments(prevComments => [...prevComments, newComment]);
+            getTicket();
             setIsModalOpen(false);
         } catch (error) {
             errorMessage(error);
@@ -180,7 +173,6 @@ const TicketPage = () => {
                     {comments.length === 0 && " :( کامنتی موجود نیست"}
                     {comments.length > 0 && comments.map((comment, index) => (
                         <Card key={index} type="inner" title={comment.created_by.username} extra={<p>{formatDate(comment.created_at)}</p>} className="ticket-card">
-                            <p>{formatDate(comment.created_at)}</p>
                             <p>{comment.text}</p>
                             {comment.created_by._id === state.id && <Button onClick={() => onClickEdit(comment)}>ویرایش</Button>}
 

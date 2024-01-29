@@ -11,9 +11,9 @@ const TicketTable = ({ filter, deadlineStatus }) => {
     const { state } = useContext(AuthContext);
     const [messageApi, contextHolder] = message.useMessage();
 
-    const pageSize = 20;
+    const pageSize = 10;
     const [sortOrder, setSortOrder] = useState("DESC");
-    const [sortBy, setSortBy] = useState("created_at")
+    const [sortBy, setSortBy] = useState("updated_at")
     const [tickets, setTickets] = useState([]);
 
     const [page, setPage] = useState(1);
@@ -100,6 +100,11 @@ const TicketTable = ({ filter, deadlineStatus }) => {
             title: 'پیام',
             dataIndex: 'description',
             render: (value) => sliceText(value),
+        },
+        {
+            title: 'مسئول',
+            dataIndex: 'assignee',
+            render: (value) => value.username,
         },
         {
             title: 'تاریخ ارسال',
