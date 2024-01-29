@@ -8,7 +8,7 @@ import FormItem from "antd/es/form/FormItem";
 import { AuthContext } from "../App";
 
 const TicketRegister = () => {
-    const { organizationName } = useParams();
+    const { organizationId } = useParams();
     const { state } = useContext(AuthContext);
     const [organizationInfo, setOrganizationInfo] = useState({
         "name": "نانوایی اصغر آقا",
@@ -31,7 +31,7 @@ const TicketRegister = () => {
             try {
                 const headers = { "x-access-token": state.token }
                 const response = await axios.get(
-                    `${config.baseUrl}/api/v1/information/organization/${organizationName}`,
+                    `${config.baseUrl}/api/v1/information/organization/${organizationId}`,
                     { headers: headers }
                 );
                 setOrganizationInfo(response.data);
@@ -39,7 +39,7 @@ const TicketRegister = () => {
                 navigate("/user")
             }
         })();
-    }, [organizationName, navigate, state]);
+    }, [organizationId, navigate, state]);
 
     const onChange = (date, dateString) => {
         console.log(date, dateString);
@@ -64,9 +64,10 @@ const TicketRegister = () => {
                 { headers: headers }
             );
             setLoading(false);
-            navigate("/ticketSubmitted");
+            navigate("/user");
         } catch (error) {
             setLoading(false);
+            console.log(error)
             errorMessage();
         }
     }

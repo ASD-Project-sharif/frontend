@@ -6,6 +6,7 @@ import axios from "axios";
 import config from "../config/config";
 import TicketInfoTable from "../components/ticketInfoTable";
 import CommentModal from "../components/commentModal";
+import { formatDate } from "../helper/strings";
 
 const UserTicketPage = () => {
 
@@ -167,7 +168,8 @@ const UserTicketPage = () => {
                 <Card title="کامنت‌ها " className="comment-card">
                     {comments.length === 0 && " :( کامنتی موجود نیست"}
                     {comments.length > 0 && comments.map((comment, index) => (
-                        <Card key={index} type="inner" title={comment.created_by.username} className="ticket-card">
+                        <Card key={index} type="inner" title={comment.created_by.username} extra={<p>{formatDate(comment.created_at)}</p>} className="ticket-card">
+
                             <p>{comment.text}</p>
                             {comment.created_by._id === state.id && <Button onClick={() => onClickEdit(comment)}>ویرایش</Button>}
 

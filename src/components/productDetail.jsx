@@ -75,7 +75,7 @@ const ProductDetail = ({ setVisible, visible, selected, getProducts }) => {
                                             {selected.name}
                                         </Descriptions.Item>
                                         <Descriptions.Item label="لینک محصول">
-                                            {`${baseUrl}/${selected._id}`}
+                                            {`${baseUrl}/support/${selected._id}`}
                                         </Descriptions.Item>
                                     </Descriptions>
                                     <br />

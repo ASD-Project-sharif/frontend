@@ -78,9 +78,19 @@ const AllUserTicketPage = () => {
             }
         },
         {
+            title: 'عنوان',
+            dataIndex: 'title',
+            render: (value) => sliceText(value),
+        },
+        {
             title: 'پیام',
             dataIndex: 'description',
             render: (value) => sliceText(value),
+        },
+        {
+            title: 'سازمان',
+            dataIndex: 'organization',
+            render: (value) => sliceText(value.name),
         },
         {
             title: 'تاریخ ارسال',

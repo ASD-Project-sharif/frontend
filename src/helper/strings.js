@@ -24,7 +24,8 @@ function toPersianNumbers(value) {
 }
 
 function formatDate(date) {
-    return toPersianNumbers(dayjs(date).format('YYYY/MM/DD h:mm'));
+    const formattedDate = date.replace('T', ' ').substring(0, date.length - 5);
+    return toPersianNumbers(formattedDate);
 }
 
 function sliceText(value, n = 75) {

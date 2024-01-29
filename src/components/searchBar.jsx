@@ -17,15 +17,19 @@ const SearchBar = () => {
     const { state } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const renderItem = (record) => ({
-        value: record.title,
-        label: (
-            <div className='auto-complete-item' onClick={() => navigate(`/user/ticket/${record.id}`)}>
-                <h4>{record.title}</h4>
-                <span>{sliceText(record.description)}</span>
-            </div>
-        ),
-    });
+    const renderItem = (record) => {
+        const path = `/user/ticket/${record._id}`
+        return ({
+            value: record.title,
+            label: (
+                <div className='auto-complete-item' onClick={() => navigate(path)}>
+                    <h4>{record.title}</h4>
+                    <span>{sliceText(record.description)}</span>
+                </div>
+
+            ),
+        })
+    };
 
     const handleChange = async (e) => {
         const searchInput = e.target.value;

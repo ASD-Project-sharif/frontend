@@ -7,6 +7,7 @@ import config from "../config/config";
 import TicketInfoTable from "../components/ticketInfoTable";
 import CommentModal from "../components/commentModal";
 import SelectAssign from "../components/selectAssign";
+import { formatDate } from "../helper/strings";
 
 const TicketPage = () => {
 
@@ -178,7 +179,8 @@ const TicketPage = () => {
                 <Card title="کامنت‌ها " className="comment-card">
                     {comments.length === 0 && " :( کامنتی موجود نیست"}
                     {comments.length > 0 && comments.map((comment, index) => (
-                        <Card key={index} type="inner" title={comment.created_by.username} className="ticket-card">
+                        <Card key={index} type="inner" title={comment.created_by.username} extra={<p>{formatDate(comment.created_at)}</p>} className="ticket-card">
+                            <p>{formatDate(comment.created_at)}</p>
                             <p>{comment.text}</p>
                             {comment.created_by._id === state.id && <Button onClick={() => onClickEdit(comment)}>ویرایش</Button>}
 
