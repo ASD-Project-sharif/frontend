@@ -34,7 +34,7 @@ const ProductForm = ({ initialValues = {}, closeModal, onReturnForm }) => {
             </Form.Item>
             <Form.Item>
                 <Button size="large" block type="primary" htmlType="submit">
-                    افزودن
+                    ثبت
                 </Button>
             </Form.Item>
         </Form>

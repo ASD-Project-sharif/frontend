@@ -156,7 +156,7 @@ function App() {
       >
         <Routes>
           <Route path="/ticketSubmitted" element={<TicketSubmitted />} />
-          <Route path="/support/:organizationName" element={<TicketRegister />} />
+          <Route path="/support/:organizationId" element={<TicketRegister />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           {getPanel()}

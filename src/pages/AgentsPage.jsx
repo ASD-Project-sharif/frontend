@@ -35,8 +35,8 @@ const AgentsPage = () => {
                 { headers: headers, params: data },
             );
             setLoading(false);
-            setTotalCount(response.data.count);
-            setAgents(response.data.agents);
+            setTotalCount(response.data.count - 1);
+            setAgents(response.data.agents.filter(agent => agent._id != state.id));
         } catch (error) {
             setLoading(false);
             errorMessage(error);
