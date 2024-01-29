@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "../components/navBar";
-import { Button, Form, Input, Radio, Row, Col, DatePicker, Card, message } from "antd";
+import { Button, Form, Input, Radio, Row, Col, DatePicker, Card, message, Select } from "antd";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import config from "../config/config";
@@ -72,6 +72,25 @@ const TicketRegister = () => {
         }
     }
 
+    const [products, setProducts] = useState([]);
+
+    const getProducts = async () => {
+        try {
+            const headers = { "x-access-token": state.token }
+            const response = await axios.get(
+                `${config.baseUrl}/api/v1/product/organization/${organizationId}`,
+                { headers: headers },
+            );
+            setProducts(response.data.products);
+        } catch (error) {
+            errorMessage(error);
+        }
+    }
+
+    useEffect(() => {
+        getProducts()
+    }, []);
+
     return (
         <div>
             {contextHolder}
@@ -112,6 +131,12 @@ const TicketRegister = () => {
                             ]}
                         >
                             <Input.TextArea size="large" placeholder="توضیحات تیکت" rows={4} />
+                        </Form.Item>
+                        <Form.Item label="محصول" name="product">
+                            <Select
+                                style={{ width: 240 }}
+                                options={products.map((product) => ({ label: product.name, value: product._id }))}
+                            />
                         </Form.Item>
                         <Form.Item name="type" label="نوع تیکت" rules={[
                             { required: true, message: "لطفا نوع تیکت را مشخص کنید." },
