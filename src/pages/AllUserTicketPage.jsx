@@ -1,4 +1,4 @@
-import { Table, message, theme } from "antd";
+import { Table, Tag, message, theme } from "antd";
 import { Header } from "antd/es/layout/layout"
 import { useNavigate } from "react-router-dom";
 import { formatDate, sliceText } from "../helper/strings";
@@ -61,13 +61,21 @@ const AllUserTicketPage = () => {
     const columns = [
         {
             title: 'کاربر',
-            dataIndex: 'user',
-            render: (value) => value
+            dataIndex: 'created_by',
+            render: (value) => value?.username
         },
         {
             title: 'وضعیت',
             dataIndex: 'status',
-            render: (value) => value,
+            render: (value) => {
+                if (value === "closed") {
+                    return <Tag color="#87d068">بسته شده</Tag>
+                } else if (value === "in_progress") {
+                    return <Tag color="#2db7f5">در جریان</Tag>
+                } else if (value === "waiting_for_admin") {
+                    return <Tag color="#f50">منتظر ادمین</Tag>
+                }
+            }
         },
         {
             title: 'پیام',
@@ -80,6 +88,7 @@ const AllUserTicketPage = () => {
             render: (value) => formatDate(value),
         },
     ];
+
     return (
         <div>
             {contextHolder}
@@ -93,7 +102,7 @@ const AllUserTicketPage = () => {
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            navigate(`/ticket/${record.id}`)
+                            navigate(`ticket/${record._id}`)
                         },
                     };
                 }}

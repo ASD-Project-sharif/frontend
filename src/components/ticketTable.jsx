@@ -61,11 +61,8 @@ const TicketTable = ({ filter, deadlineStatus }) => {
     const columns = [
         {
             title: 'کاربر',
-            dataIndex: 'user',
-            // sorter: (a, b, sortOrder) => {
-            //     sorter('name', sortOrder);
-            // },
-            render: (value) => value
+            dataIndex: 'created_by',
+            render: (value) => value?.username
         },
         {
             title: 'عنوان',
@@ -75,9 +72,6 @@ const TicketTable = ({ filter, deadlineStatus }) => {
         {
             title: 'وضعیت',
             dataIndex: 'status',
-            // sorter: (a, b, sortOrder) => {
-            //     sorter('status', sortOrder);
-            // },
             render: (value) => {
                 if (value === "closed") {
                     return <Tag color="#87d068">بسته شده</Tag>
@@ -132,7 +126,7 @@ const TicketTable = ({ filter, deadlineStatus }) => {
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            navigate(`/ticket/${record.id}`)
+                            navigate(`ticket/${record._id}`)
                         },
                     };
                 }}

@@ -9,10 +9,12 @@ import AllTicketsPage from './pages/AllTicketsPage';
 import UserPanel from './pages/UserPanel';
 import TicketRegister from './pages/TicketRegister';
 import TicketSubmitted from './pages/TicketSubmitted';
+import TicketPage from './pages/TicketPage';
 import NearDeadlinePage from './pages/NearDeadlinePage';
 import PassedDeadlinePage from './pages/PassedTicketsPage';
 import AgentsPage from './pages/AgentsPage';
 import AllUserTicketPage from './pages/AllUserTicketPage';
+import UserTicketPage from './pages/UserTicketPage';
 import ProductsPage from './pages/ProductsPage';
 
 
@@ -108,6 +110,7 @@ function App() {
           }
         >
           <Route index element={<AllTicketsPage />} />
+          <Route path="/user/ticket/:ticketId" element={<TicketPage />} />
           <Route path="/user/nearDeadline" element={<NearDeadlinePage />} />
           <Route path="/user/passedDeadline" element={<PassedDeadlinePage />} />
           <Route path="/user/agents" element={<AgentsPage />} />
@@ -123,6 +126,7 @@ function App() {
           }
         >
           <Route index element={<AllUserTicketPage />} />
+          <Route path="/user/ticket/:ticketId" element={<UserTicketPage />} />
         </Route>
       )
 
