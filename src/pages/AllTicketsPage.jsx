@@ -3,6 +3,7 @@ import { Header } from "antd/es/layout/layout";
 import Filter from "../components/filter";
 import { useState } from "react";
 import TicketTable from "../components/ticketTable";
+import SearchBar from "../components/searchBar";
 
 const AllTicketsPage = () => {
     const {
@@ -12,10 +13,11 @@ const AllTicketsPage = () => {
 
     return (
         <div>
+            <SearchBar />
             <Header style={{ background: colorBgContainer }} className="panel-header">
-                <span>
+                <h3>
                     همه تیکت‌ها
-                </span>
+                </h3>
                 <Filter setFilterValues={setFilter} />
             </Header>
             <TicketTable filter={filter} deadlineStatus={undefined} />

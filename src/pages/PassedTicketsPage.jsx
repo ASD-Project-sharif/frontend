@@ -12,9 +12,9 @@ const PassedDeadlinePage = () => {
     return (
         <div>
             <Header style={{ background: colorBgContainer }} className="panel-header">
-                <span>
+                <h3>
                     تیکت‌های ددلاین رد شده
-                </span>
+                </h3>
                 <Filter setFilterValues={setFilter} />
             </Header>
             <TicketTable filter={filter} deadlineStatus="passed" />

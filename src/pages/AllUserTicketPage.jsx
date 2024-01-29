@@ -16,7 +16,7 @@ const AllUserTicketPage = () => {
     const navigate = useNavigate();
 
     const pageSize = 20;
-    const [tickets, setTickets] = useState();
+    const [tickets, setTickets] = useState([]);
 
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState();
@@ -36,7 +36,7 @@ const AllUserTicketPage = () => {
                 }
                 const headers = { "x-access-token": state.token }
                 const response = await axios.get(
-                    `${config.baseUrl}/api/v1/ticket/user`,
+                    `${config.baseUrl}/api/v1/ticket/user/`,
                     { headers: headers, params: data },
                     data
                 );
@@ -93,9 +93,9 @@ const AllUserTicketPage = () => {
         <div>
             {contextHolder}
             <Header style={{ background: colorBgContainer }} className="panel-header">
-                <span>
+                <h3>
                     همه تیکت‌ها
-                </span>
+                </h3>
             </Header>
 
             <Table

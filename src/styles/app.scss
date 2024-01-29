@@ -94,6 +94,20 @@
         url("./fonts/ttf/iranyekanwebextrablack.ttf") format("truetype");
 }
 
+@mixin absolute($args) {
+    @include position(absolute, $args);
+}
+
+@mixin position($position, $args) {
+    @each $o in top right bottom left {
+      $i: index($args, $o);
+      @if $i and $i + 1 <= length($args) and type-of(nth($args, $i + 1)) == number {
+        #{$o}: nth($args, $i + 1);
+      }
+    }
+    position: $position;
+}
+
 $primary-color: #02c780;
 
 body {
@@ -287,6 +301,18 @@ body {
     align-items: center;
   }
 
+  .auto-complete {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .auto-complete-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 30px;
+  }
   .ant-table-row{
     cursor: pointer;
   }
@@ -305,4 +331,23 @@ body {
 
   .ticket-title{
     margin-top: 1rem;
+  }
+  .shortview-header {
+    max-width: 225px;
+  }
+  
+  .shortview-header-desc {
+    margin: 0;
+    align-items: center;
+  }
+  
+  .shortview-card {
+    .ant-card-body {
+      padding: 20px;
+    }
+    margin-bottom: 8px;
+  }
+
+  .shortview-actions-container {
+    @include absolute(top 28px left 28px);
   }
