@@ -7,7 +7,7 @@ import config from "../config/config";
 import TicketInfoTable from "../components/ticketInfoTable";
 import CommentModal from "../components/commentModal";
 
-const TicketPage = () => {
+const UserTicketPage = () => {
 
     const { ticketId } = useParams();
     const [loading, setLoading] = useState(false);
@@ -59,33 +59,6 @@ const TicketPage = () => {
             content: error.response.data.message,
         });
     };
-
-    const [loadingChangeStatus, setLoadingChangeStatus] = useState(false);
-
-    const toggleTicketStatus = async () => {
-        setLoadingChangeStatus(true);
-        try {
-            const headers = { "x-access-token": state.token }
-            const data = {
-                open: ticketInfo.status === "closed" ? true : false
-            }
-            await axios.post(
-                `${config.baseUrl}/api/v1/ticket/change/status/${ticketInfo._id}`,
-                data,
-                { headers: headers }
-            );
-
-            const newStatus = ticketInfo.status === "closed" ? "in_progress" : "closed";
-            setTicketInfo({
-                ...ticketInfo,
-                status: newStatus,
-            });
-            setLoadingChangeStatus(false);
-        } catch (error) {
-            errorMessage(error);
-            setLoadingChangeStatus(false);
-        }
-    }
 
     const header = "تیکت" + " " + ticketInfo._id;
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -146,6 +119,30 @@ const TicketPage = () => {
         }
     }
 
+    const [isEditDescModalOpen, setisEditDescModalOpen] = useState(false);
+
+    const handleEditDesc = async (text) => {
+        try {
+            const headers = { "x-access-token": state.token }
+            const data = {
+                description: text,
+                title: ticketInfo.title
+            }
+            await axios.post(
+                `${config.baseUrl}/api/v1/ticket/edit/${ticketInfo._id}`,
+                data,
+                { headers: headers }
+            );
+            setisEditDescModalOpen(false);
+            getTicket();
+        } catch (error) {
+            errorMessage(error);
+        }
+    }
+
+    const onClickEditDesc = () => {
+        setisEditDescModalOpen(true);
+    }
     return (
         <>
             {contextHolder}
@@ -155,13 +152,10 @@ const TicketPage = () => {
                         {header}
                     </h1>
                 </Col>
-                <Col span={8} className="ticket-title">
+                <Col span={4} className="ticket-title">
                     <Flex gap="middle">
                         <Button size="large" block type="primary" onClick={showModal}>
                             ثبت پاسخ جدید
-                        </Button>
-                        <Button size="large" block type="default" loading={loadingChangeStatus} onClick={toggleTicketStatus} className={ticketInfo.status === 'in_progress' ? 'primary' : 'destructive'}>
-                            {ticketInfo.status === 'closed' ? 'باز کردن تیکت' : 'بستن تیکت'}
                         </Button>
                     </Flex>
                 </Col>
@@ -169,6 +163,7 @@ const TicketPage = () => {
             <TicketInfoTable ticketInfo={ticketInfo} />
             <Card title={ticketInfo.title} >
                 <p>{ticketInfo.description}</p>
+                <Button onClick={onClickEditDesc}>ویرایش</Button>
                 <Card title="کامنت‌ها " className="comment-card">
                     {comments.length === 0 && " :( کامنتی موجود نیست"}
                     {comments.length > 0 && comments.map((comment, index) => (
@@ -184,9 +179,9 @@ const TicketPage = () => {
 
             <CommentModal handleSubmit={handleOk} title='ثبت پاسخ جدید' open={isModalOpen} setOpen={setIsModalOpen} />
             <CommentModal handleSubmit={handleEdit} title='ویرایش پاسخ' open={isEditModalOpen} setOpen={setIsEditModalOpen} initialText={selectedComment.text} />
-
+            <CommentModal handleSubmit={handleEditDesc} title='ویرایش متن تیکت' open={isEditDescModalOpen} setOpen={setisEditDescModalOpen} initialText={ticketInfo.description} />
         </>
     )
 }
 
-export default TicketPage;
+export default UserTicketPage;

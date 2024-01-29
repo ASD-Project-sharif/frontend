@@ -14,6 +14,7 @@ import NearDeadlinePage from './pages/NearDeadlinePage';
 import PassedDeadlinePage from './pages/PassedTicketsPage';
 import AgentsPage from './pages/AgentsPage';
 import AllUserTicketPage from './pages/AllUserTicketPage';
+import UserTicketPage from './pages/UserTicketPage';
 
 
 (async function () {
@@ -123,6 +124,7 @@ function App() {
           }
         >
           <Route index element={<AllUserTicketPage />} />
+          <Route path="/user/ticket/:ticketId" element={<UserTicketPage />} />
         </Route>
       )
 

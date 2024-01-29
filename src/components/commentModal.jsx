@@ -1,8 +1,11 @@
 import { Input, Modal } from "antd"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const CommentModal = ({ title, open, setOpen, handleSubmit }) => {
-    const [text, setText] = useState('');
+const CommentModal = ({ title, open, setOpen, handleSubmit, initialText = "" }) => {
+    const [text, setText] = useState("");
+    useEffect(() => {
+        setText(initialText)
+    }, [initialText]);
 
     const handleCancel = () => {
         setOpen(false);

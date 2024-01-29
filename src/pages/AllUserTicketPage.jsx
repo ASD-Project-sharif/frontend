@@ -1,4 +1,4 @@
-import { Table, message, theme } from "antd";
+import { Table, Tag, message, theme } from "antd";
 import { Header } from "antd/es/layout/layout"
 import { useNavigate } from "react-router-dom";
 import { formatDate, sliceText } from "../helper/strings";
@@ -16,22 +16,7 @@ const AllUserTicketPage = () => {
     const navigate = useNavigate();
 
     const pageSize = 20;
-    const [tickets, setTickets] = useState([{
-        "id": "123",
-        "user": "ali",
-        "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-        "created_at": 1703613489000,
-        "status": "open",
-        "deadlineStatus": "near"
-    },
-    {
-        "id": "123",
-        "user": "ali",
-        "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-        "created_at": 1703613489000,
-        "status": "open",
-        "deadlineStatus": "passed"
-    }]);
+    const [tickets, setTickets] = useState();
 
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState();
@@ -51,7 +36,7 @@ const AllUserTicketPage = () => {
                 }
                 const headers = { "x-access-token": state.token }
                 const response = await axios.get(
-                    `${config.baseUrl}/api/v1/ticket/user/${state.id}`,
+                    `${config.baseUrl}/api/v1/ticket/user`,
                     { headers: headers, params: data },
                     data
                 );
@@ -76,13 +61,21 @@ const AllUserTicketPage = () => {
     const columns = [
         {
             title: 'کاربر',
-            dataIndex: 'user',
-            render: (value) => value
+            dataIndex: 'created_by',
+            render: (value) => value?.username
         },
         {
             title: 'وضعیت',
             dataIndex: 'status',
-            render: (value) => value,
+            render: (value) => {
+                if (value === "closed") {
+                    return <Tag color="#87d068">بسته شده</Tag>
+                } else if (value === "in_progress") {
+                    return <Tag color="#2db7f5">در جریان</Tag>
+                } else if (value === "waiting_for_admin") {
+                    return <Tag color="#f50">منتظر ادمین</Tag>
+                }
+            }
         },
         {
             title: 'پیام',
@@ -95,6 +88,7 @@ const AllUserTicketPage = () => {
             render: (value) => formatDate(value),
         },
     ];
+
     return (
         <div>
             {contextHolder}
@@ -108,7 +102,7 @@ const AllUserTicketPage = () => {
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            navigate(`/ticket/${record.id}`)
+                            navigate(`ticket/${record._id}`)
                         },
                     };
                 }}
