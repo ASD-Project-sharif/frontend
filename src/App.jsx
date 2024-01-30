@@ -6,9 +6,9 @@ import { createContext, useReducer } from 'react';
 import OrganizationPanel from './pages/OrganizationPanel';
 import MainPage from './pages/MainPage';
 import AllTicketsPage from './pages/AllTicketsPage';
+import UserPanel from './pages/UserPanel';
 import TicketRegister from './pages/TicketRegister';
 import TicketSubmitted from './pages/TicketSubmitted';
-import UserPanel from './pages/UserPanel';
 
 
 (async function () {
@@ -32,7 +32,6 @@ const initialState = {
 
 const reducer = (state, action) => {
   let token = null;
-  console.log(action.payload)
   switch (action.type) {
     case "LOGIN":
       token = "Token " + action.payload.token;

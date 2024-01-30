@@ -8,15 +8,38 @@ import FormItem from "antd/es/form/FormItem";
 import { AuthContext } from "../App";
 
 const TicketRegister = () => {
+    const { organizationName } = useParams();
     const { state } = useContext(AuthContext);
+    const [organizationInfo, setOrganizationInfo] = useState({
+        "name": "نانوایی اصغر آقا",
+        "description": "بهترین نانوایی در سطح شهر طهران",
+        "logo": <img src="https://mivezendegi.ir/wp-content/uploads/2019/10/COVER.jpg" width={150} />,
+        "id": "111"
+    });
+
     let navigate = useNavigate();
 
-    useEffect(() => {
-        if(!state.isAuthenticated) {
-            navigate("/login")
 
+    useEffect(() => {
+        if (!state.isAuthenticated) {
+            navigate("/login")
         }
     }, [state.isAuthenticated, navigate]);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const headers = { "x-access-token": state.token }
+                const response = await axios.get(
+                    `${config.baseUrl}/api/v1/information/organization/${organizationName}`,
+                    { headers: headers }
+                );
+                setOrganizationInfo(response.data);
+            } catch (error) {
+                navigate("/user")
+            }
+        })();
+    }, [organizationName, navigate]);
 
     const onChange = (date, dateString) => {
         console.log(date, dateString);
@@ -30,21 +53,15 @@ const TicketRegister = () => {
         });
     };
 
-    const [organizationInfo, setOrganizationInfo] = useState({
-        "name": "نانوایی اصغر آقا",
-        "description": "بهترین نانوایی در سطح شهر طهران",
-        "logo": <img src="https://mivezendegi.ir/wp-content/uploads/2019/10/COVER.jpg" width={150} />,
-        "id" : "111"
-    });
-
-
     const [loading, setLoading] = useState(false);
     async function submitTicket(values) {
         try {
             setLoading(true);
+            const headers = { "x-access-token": state.token }
             await axios.post(
                 `${config.baseUrl}/api/v1/ticket/add`,
-                {...values, organizationId: organizationInfo.id, userId: state.id}
+                { ...values, organizationId: organizationInfo.id, userId: state.id, token: state.token },
+                { headers: headers }
             );
             setLoading(false);
             navigate("/ticketSubmitted");
@@ -54,13 +71,6 @@ const TicketRegister = () => {
         }
     }
 
-    const { organizationName } = useParams();
-    useEffect(() => {
-        (async () => {
-            const orgInfo = await axios.get(`${config.baseUrl}/api/v1/organization/${organizationName}`)
-            setOrganizationInfo(orgInfo)
-        })
-    }, [organizationName]);
     return (
         <div>
             {contextHolder}
