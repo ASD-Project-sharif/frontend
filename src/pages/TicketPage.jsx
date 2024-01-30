@@ -1,4 +1,4 @@
-import { Button, Col, Row, Card, Flex, message } from "antd";
+import { Button, Col, Row, Card, Flex, message, Modal } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../App";
@@ -8,6 +8,7 @@ import TicketInfoTable from "../components/ticketInfoTable";
 import CommentModal from "../components/commentModal";
 import SelectAssign from "../components/selectAssign";
 import { formatDate } from "../helper/strings";
+import LogTable from "../components/logTable";
 
 const TicketPage = () => {
 
@@ -148,25 +149,41 @@ const TicketPage = () => {
         }
     }
 
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const showModalLog = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleOkLog = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleCancelLog = () => {
+        setIsModalVisible(false);
+    };
+
     return (
         <>
             {contextHolder}
             <Row>
-                <Col span={16}>
+                <Col span={12}>
                     <h1>
                         {header}
                     </h1>
                 </Col>
-                <Col span={8} className="ticket-title">
+                <Col span={12} className="ticket-title">
                     <Flex gap="middle">
-                        <Button size="large" block type="primary" onClick={showModal}>
+                        <Button type="primary" onClick={showModalLog}>
+                             تاریخچه تیکت
+                        </Button>
+                        <Button block type="primary" onClick={showModal}>
                             ثبت پاسخ جدید
                         </Button>
-                        <Button size="large" block type="default" loading={loadingChangeStatus} onClick={toggleTicketStatus} className={ticketInfo.status === 'in_progress' ? 'primary' : 'destructive'}>
+                        <Button block type="default" loading={loadingChangeStatus} onClick={toggleTicketStatus} className={ticketInfo.status === 'in_progress' ? 'primary' : 'destructive'}>
                             {ticketInfo.status === 'closed' ? 'باز کردن تیکت' : 'بستن تیکت'}
                         </Button>
                     </Flex>
-
                 </Col>
                 <Col>
                     <SelectAssign getTicket={getTicket} ticket={ticketInfo} />
@@ -189,7 +206,12 @@ const TicketPage = () => {
 
                 </Card>
             </Card>
-
+            <Modal title="شرح تغییرات تیکت"
+                open={isModalVisible}
+                footer={null}
+                onCancel={handleCancelLog}>
+                <LogTable id={ticketInfo._id} />
+            </Modal >
             <CommentModal handleSubmit={handleOk} title='ثبت پاسخ جدید' open={isModalOpen} setOpen={setIsModalOpen} />
             <CommentModal handleSubmit={handleEdit} title='ویرایش پاسخ' open={isEditModalOpen} setOpen={setIsEditModalOpen} initialText={selectedComment.text} />
 
