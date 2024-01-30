@@ -33,6 +33,7 @@ const TicketPage = () => {
     });
 
     const [comments, setComments] = useState({})
+    const [ban, setBan] = useState(false);
 
     const getTicket = async () => {
         try {
@@ -42,10 +43,10 @@ const TicketPage = () => {
                 `${config.baseUrl}/api/v1/ticket/${ticketId}`,
                 { headers: headers },
             );
-            console.log(response.data.ticket)
             setLoading(false);
             setTicketInfo(response.data.ticket);
-            setComments(response.data.comments)
+            setComments(response.data.comments);
+            setBan(response.data.ban);
         } catch (error) {
             setLoading(false);
             errorMessage(error);
@@ -148,13 +149,32 @@ const TicketPage = () => {
         setIsModalVisible(true);
     };
 
-    const handleOkLog = () => {
-        setIsModalVisible(false);
-    };
-
     const handleCancelLog = () => {
         setIsModalVisible(false);
     };
+
+    const [isBanLoading, setIsBanLoading] = useState(false);
+
+    const toggleBan = async () => {
+        setIsBanLoading(true);
+        try {
+            const headers = { "x-access-token": state.token }
+            const data = {
+                suspend: !ban,
+                id: ticketInfo.created_by._id
+            }
+            await axios.post(
+                `${config.baseUrl}/api/v1/suspended-user`,
+                data,
+                { headers: headers }
+            );
+            getTicket()
+            setIsBanLoading(false);
+        } catch (error) {
+            errorMessage(error);
+            setIsBanLoading(false);
+        }
+    }
 
     return (
         <>
@@ -168,13 +188,17 @@ const TicketPage = () => {
                 <Col span={12} className="ticket-title">
                     <Flex gap="middle">
                         <Button type="primary" onClick={showModalLog}>
-                             تاریخچه تیکت
+                            تاریخچه تیکت
                         </Button>
                         <Button block type="primary" onClick={showModal}>
                             ثبت پاسخ جدید
                         </Button>
                         <Button block type="default" loading={loadingChangeStatus} onClick={toggleTicketStatus} className={ticketInfo.status === 'in_progress' ? 'primary' : 'destructive'}>
                             {ticketInfo.status === 'closed' ? 'باز کردن تیکت' : 'بستن تیکت'}
+                        </Button>
+
+                        <Button block type="default" loading={isBanLoading} onClick={toggleBan} className={ticketInfo.ban === false ? 'primary' : 'destructive'}>
+                            {ban === true ? 'رفع منع کاربر' : 'منع کاربر'}
                         </Button>
                     </Flex>
                 </Col>

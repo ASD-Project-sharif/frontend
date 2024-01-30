@@ -83,6 +83,20 @@ const TicketTable = ({ filter, deadlineStatus }) => {
             }
         },
         {
+            title: 'نوع تیکت',
+            dataIndex: 'type',
+            key: 'type',
+            render: (value) => {
+                if (value === "bug") {
+                    return <Tag color="error"> باگ</Tag>
+                } else if (value === "suggestion") {
+                    return <Tag color="warning">پیشنهاد </Tag>
+                } else if (value === "question") {
+                    return <Tag color="success">سوال </Tag>
+                }
+            }
+        },
+        {
             title: 'وضعیت ددلاین',
             dataIndex: 'deadlineStatus',
             render: (value) => {

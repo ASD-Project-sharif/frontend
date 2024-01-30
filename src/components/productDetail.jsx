@@ -74,9 +74,10 @@ const ProductDetail = ({ setVisible, visible, selected, getProducts }) => {
                                         <Descriptions.Item label="عنوان">
                                             {selected.name}
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="لینک محصول">
-                                            {`${baseUrl}/support/${selected._id}`}
+                                        <Descriptions.Item label="توضیحات">
+                                            {selected.description}
                                         </Descriptions.Item>
+
                                     </Descriptions>
                                     <br />
                                 </Collapse.Panel>
