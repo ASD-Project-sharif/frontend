@@ -112,7 +112,7 @@ const TicketRegister = () => {
                             </Radio.Group>
                         </Form.Item >
                         <FormItem name="deadline" label="ددلاین‌ برای پاسخگویی" rules={[
-                            { required: true, message: "لطفا توضیحات تیکت را وارد کنید." },
+                            { message: "لطفا توضیحات تیکت را وارد کنید." },
                         ]}>
                             <DatePicker onChange={onChange} />
                         </FormItem>
