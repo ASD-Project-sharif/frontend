@@ -11,36 +11,10 @@ const TicketTable = ({ filter, deadlineStatus }) => {
     const { state } = useContext(AuthContext);
     const [messageApi, contextHolder] = message.useMessage();
 
-    const pageSize = 20;
+    const pageSize = 10;
     const [sortOrder, setSortOrder] = useState("DESC");
-    const [sortBy, setSortBy] = useState("created_at")
-    const [tickets, setTickets] = useState([{
-        "id": "123",
-        "user": "ali",
-        "title": "سلام",
-        "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-        "created_at": 1703613489000,
-        "status": "closed",
-        "deadlineStatus": "near"
-    },
-    {
-        "id": "123",
-        "title": "سلام",
-        "user": "ali",
-        "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-        "created_at": 1703613489000,
-        "status": "in_progress",
-        "deadlineStatus": "near"
-    },
-    {
-        "id": "123",
-        "title": "سلام",
-        "user": "ali",
-        "description": "الگویی است که از آن برای تسهیل ارتباط و هماهنگی بین اجزای یک سیستم توزیع شده استفاده می‌شود. در این الگو یک موجودیت مرکزی به نام broker وظیفه ارتباط بین اجزا را برعهده دارد که این امر به decoupling کمک می‌کند.",
-        "created_at": 1703613489000,
-        "status": "waiting_for_admin",
-        "deadlineStatus": "passed"
-    }]);
+    const [sortBy, setSortBy] = useState("updated_at")
+    const [tickets, setTickets] = useState([]);
 
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState();
@@ -63,7 +37,7 @@ const TicketTable = ({ filter, deadlineStatus }) => {
                 }
                 const headers = { "x-access-token": state.token }
                 const response = await axios.get(
-                    `${config.baseUrl}/api/v1/ticket/organization/${state.id}`,
+                    `${config.baseUrl}/api/v1/ticket/organization/`,
                     { headers: headers, params: data },
                 );
                 setLoading(false);
@@ -87,11 +61,8 @@ const TicketTable = ({ filter, deadlineStatus }) => {
     const columns = [
         {
             title: 'کاربر',
-            dataIndex: 'user',
-            // sorter: (a, b, sortOrder) => {
-            //     sorter('name', sortOrder);
-            // },
-            render: (value) => value
+            dataIndex: 'created_by',
+            render: (value) => value?.username
         },
         {
             title: 'عنوان',
@@ -101,9 +72,6 @@ const TicketTable = ({ filter, deadlineStatus }) => {
         {
             title: 'وضعیت',
             dataIndex: 'status',
-            // sorter: (a, b, sortOrder) => {
-            //     sorter('status', sortOrder);
-            // },
             render: (value) => {
                 if (value === "closed") {
                     return <Tag color="#87d068">بسته شده</Tag>
@@ -134,6 +102,11 @@ const TicketTable = ({ filter, deadlineStatus }) => {
             render: (value) => sliceText(value),
         },
         {
+            title: 'مسئول',
+            dataIndex: 'assignee',
+            render: (value) => value.username,
+        },
+        {
             title: 'تاریخ ارسال',
             dataIndex: 'created_at',
             sorter: (a, b, sortOrder) => {
@@ -158,7 +131,7 @@ const TicketTable = ({ filter, deadlineStatus }) => {
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            navigate(`/ticket/${record.id}`)
+                            navigate(`/user/ticket/${record._id}`)
                         },
                     };
                 }}

@@ -9,10 +9,13 @@ import AllTicketsPage from './pages/AllTicketsPage';
 import UserPanel from './pages/UserPanel';
 import TicketRegister from './pages/TicketRegister';
 import TicketSubmitted from './pages/TicketSubmitted';
+import TicketPage from './pages/TicketPage';
 import NearDeadlinePage from './pages/NearDeadlinePage';
 import PassedDeadlinePage from './pages/PassedTicketsPage';
 import AgentsPage from './pages/AgentsPage';
 import AllUserTicketPage from './pages/AllUserTicketPage';
+import UserTicketPage from './pages/UserTicketPage';
+import ProductsPage from './pages/ProductsPage';
 
 
 (async function () {
@@ -98,7 +101,7 @@ function App() {
       )
     }
     console.log(state.role)
-    if (state.role === "ROLE_ADMIN" || state.role === "ROLE_AGENT") {
+    if (state.role === "ROLE_ADMIN") {
       return (
         <Route
           path="/user"
@@ -107,9 +110,25 @@ function App() {
           }
         >
           <Route index element={<AllTicketsPage />} />
+          <Route path="/user/ticket/:ticketId" element={<TicketPage />} />
           <Route path="/user/nearDeadline" element={<NearDeadlinePage />} />
           <Route path="/user/passedDeadline" element={<PassedDeadlinePage />} />
           <Route path="/user/agents" element={<AgentsPage />} />
+          <Route path="/user/products" element={<ProductsPage />} />
+        </Route>
+      )
+    } else if (state.role === "ROLE_AGENT") {
+      return (
+        <Route
+          path="/user"
+          element={
+            <OrganizationPanel />
+          }
+        >
+          <Route index element={<AllTicketsPage />} />
+          <Route path="/user/ticket/:ticketId" element={<TicketPage />} />
+          <Route path="/user/nearDeadline" element={<NearDeadlinePage />} />
+          <Route path="/user/passedDeadline" element={<PassedDeadlinePage />} />
         </Route>
       )
     } else {
@@ -121,6 +140,7 @@ function App() {
           }
         >
           <Route index element={<AllUserTicketPage />} />
+          <Route path="/user/ticket/:ticketId" element={<UserTicketPage />} />
         </Route>
       )
 
@@ -136,7 +156,7 @@ function App() {
       >
         <Routes>
           <Route path="/ticketSubmitted" element={<TicketSubmitted />} />
-          <Route path="/support/:organizationName" element={<TicketRegister />} />
+          <Route path="/support/:organizationId" element={<TicketRegister />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           {getPanel()}

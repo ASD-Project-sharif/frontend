@@ -1,13 +1,15 @@
 import { Button, Form, Input, Modal, message } from "antd"
 import { PlusOutlined } from '@ant-design/icons';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import config from "../config/config";
+import { AuthContext } from "../App";
 
 const AgentCreator = ({ getAgents }) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { state } = useContext(AuthContext);
 
     const [form] = Form.useForm();
 
@@ -22,15 +24,17 @@ const AgentCreator = ({ getAgents }) => {
     const submitAgentForm = async (values) => {
         setLoading(true);
         try {
+            const headers = { "x-access-token": state.token }
             await axios.post(
-                `${config.baseUrl}/api/v1/add/agent`,
+                `${config.baseUrl}/api/v1/agent/add`,
                 {
                     ...values,
-                }
+                },
+                { headers: headers }
             );
             setLoading(false);
             form.resetFields();
-            getAgents();
+            await getAgents();
             closeModal();
         } catch (error) {
             errorMessage(error);
@@ -104,6 +108,15 @@ const AgentCreator = ({ getAgents }) => {
                         ]}
                     >
                         <Input.Password size="large" placeholder="تکرار کلمه عبور" />
+                    </Form.Item>
+                    <Form.Item
+                        name="email"
+                        rules={[
+                            { required: true, message: "لطفا ایمیل را وارد کنید." },
+                            { type: "email", message: "فرمت ایمیل درست نیست." }
+                        ]}
+                    >
+                        <Input size="large" placeholder="ایمیل سازمانی" />
                     </Form.Item>
                     <Form.Item>
                         <Button size="large" block type="primary" htmlType="submit" loading={loading}>

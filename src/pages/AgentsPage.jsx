@@ -19,7 +19,7 @@ const AgentsPage = () => {
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState();
     const [loading, setLoading] = useState(false);
-    const [agents, setAgents] = useState([{ "name": "ali", "username": "ali" }]);
+    const [agents, setAgents] = useState([]);
 
     const getAgents = async () => {
         try {
@@ -31,12 +31,12 @@ const AgentsPage = () => {
             }
             const headers = { "x-access-token": state.token }
             const response = await axios.get(
-                `${config.baseUrl}/api/v1/agents`,
+                `${config.baseUrl}/api/v1/agent`,
                 { headers: headers, params: data },
             );
             setLoading(false);
-            setTotalCount(response.data.count);
-            setAgents(response.data.agents);
+            setTotalCount(response.data.count - 1);
+            setAgents(response.data.agents.filter(agent => agent._id != state.id));
         } catch (error) {
             setLoading(false);
             errorMessage(error);
@@ -65,7 +65,7 @@ const AgentsPage = () => {
 
     useEffect(() => {
         getAgents();
-    });
+    }, []);
 
     return (
         <div>
