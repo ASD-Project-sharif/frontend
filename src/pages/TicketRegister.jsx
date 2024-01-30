@@ -46,10 +46,10 @@ const TicketRegister = () => {
     };
 
     const [messageApi, contextHolder] = message.useMessage();
-    const errorMessage = () => {
+    const errorMessage = (error) => {
         messageApi.open({
             type: "error",
-            content: "در ثبت کردن تیکت شما مشکلی رخ داده است. مجدد تلاش کنید.",
+            content: error.response.data.message,
         });
     };
 
@@ -68,7 +68,7 @@ const TicketRegister = () => {
         } catch (error) {
             setLoading(false);
             console.log(error)
-            errorMessage();
+            errorMessage(error);
         }
     }
 
