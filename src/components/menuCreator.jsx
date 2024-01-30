@@ -63,6 +63,11 @@ const MenuCreator = () => {
 
             </Menu.Item>
 
+            <Menu.Item key="/user/profile" icon="">
+                <Link to="/user/profile">پروفایل سازمان </Link>
+
+            </Menu.Item>
+
             <Menu.Item
                 key="exit"
                 onClick={logout}
@@ -120,6 +125,12 @@ const MenuCreator = () => {
                 </Menu.Item>
 
             </Menu.SubMenu>
+
+            <Menu.Item key="/user/profile" icon="">
+                <Link to="/user/profile">پروفایل سازمان </Link>
+
+
+            </Menu.Item>
 
             <Menu.Item
                 key="exit"
