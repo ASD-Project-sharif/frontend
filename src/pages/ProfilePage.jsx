@@ -1,93 +1,87 @@
-import { Button, Col, Flex, Input } from "antd";
+import { Flex, Input, message } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../App";
+import config from "../config/config";
+import axios from "axios";
 
 const ProfilePage = () => {
+    const [loading, setLoading] = useState(false);
+    const { state } = useContext(AuthContext);
+    const [organization, setOrganization] = useState({})
+    const [messageApi, contextHolder] = message.useMessage();
 
-    const { TextArea } = Input;
-    const [isEditing, setIsEditing] = useState(false);
-    const [initialDisabledState, setInitialDisabledState] = useState(true);
+    const baseUrl = window.location.protocol + "//" + window.location.host;
 
-
-    const toggleEditing = () => {
-        if (isEditing) {
-            setIsEditing(false);
-            setInitialDisabledState(true);
-        } else {
-            setIsEditing(true);
-            setInitialDisabledState(false);
+    const getProfile = async () => {
+        try {
+            setLoading(true);
+            const headers = { "x-access-token": state.token }
+            const response = await axios.get(
+                `${config.baseUrl}/api/v1/information/organization`,
+                { headers: headers },
+            );
+            console.log(response.data)
+            setLoading(false);
+            setOrganization(response.data);
+        } catch (error) {
+            setLoading(false);
+            errorMessage(error);
         }
+    }
+
+    useEffect(() => {
+        getProfile()
+    }, []);
+
+    const errorMessage = (error) => {
+        messageApi.open({
+            type: "error",
+            content: error.response.data.message,
+        });
     };
 
-    const discardChanges = () => {
-        setIsEditing(false);
-        setInitialDisabledState(true);
-    };
+    console.log(organization)
 
     return (
         <div>
+            {contextHolder}
             <Header className="panel-header" style={{ backgroundColor: '#f5f5f5' }}>
                 <span>
                     تنظیمات پروفایل
                 </span>
-                <Flex gap="middle">
-                    {isEditing ? (
-                        <Button primary onClick={toggleEditing}>
-                            ذخیره تغییرات
-                        </Button>
-                    ) : (
-                        <Button primary onClick={toggleEditing}>
-                            ویرایش اطلاعات
-                        </Button>
-                    )}
-                    {isEditing && (
-                        <Button onClick={discardChanges} danger>
-                            لغو تغییرات
-                        </Button>
-                    )}
-                </Flex>
+
             </Header>
             <Flex vertical gap="small" className="org-info-container" >
                 <Flex vertical gap="small">
                     <label>
                         نام سازمان
                     </label>
-                    <Input placeholder="organization's name"
-                        disabled={!isEditing}
-                        defaultValue={"organization's name"}
-                    />
-                </Flex>
-                <Flex vertical gap="small">
-                        <label>
-                            توضیحات سازمان
-                        </label>
-                        <TextArea rows={3} placeholder="organization's description" maxLength={500}
-                            disabled={!isEditing} style={{ height: 90, resize: "none" }}
-                            defaultValue={"organization's description"}
-                        />
-                    </Flex>
-                <Flex vertical gap="small">
-                    <label>
-                        نام کاربری ادمین
-                    </label>
-                    <Input placeholder="organization's admin's username"
-                        disabled={!isEditing}
-                        defaultValue={"organization's admin's username"}
-                    />
-                </Flex>
-                <Flex vertical gap="small">
-                    <label>
-                        ایمیل سازمانی
-                    </label>
-                    <Input placeholder="organization's admin's email"
-                        disabled={!isEditing}
-                        defaultValue="organization's admin's email"
+                    <Input
 
+                        value={organization?.name}
                     />
                 </Flex>
-                    </Flex>
-                    </div>
-                )
+                <Flex vertical gap="small">
+                    <label>
+                        توضیحات سازمان
+                    </label>
+                    <Input.TextArea rows={3} maxLength={500}
+                        style={{ height: 90, resize: "none" }}
+                        value={organization?.description}
+                    />
+                </Flex>
+                <Flex vertical gap="small">
+                    <label>
+                        لینک
+                    </label>
+                    <Input
+                        value={`${baseUrl}/support/${organization?.id}`}
+                    />
+                </Flex>
+            </Flex>
+        </div>
+    )
 }
 
 export default ProfilePage;

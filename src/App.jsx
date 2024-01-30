@@ -16,6 +16,7 @@ import AgentsPage from './pages/AgentsPage';
 import AllUserTicketPage from './pages/AllUserTicketPage';
 import UserTicketPage from './pages/UserTicketPage';
 import ProductsPage from './pages/ProductsPage';
+import ProfilePage from './pages/ProfilePage';
 
 
 (async function () {
@@ -115,6 +116,7 @@ function App() {
           <Route path="/user/passedDeadline" element={<PassedDeadlinePage />} />
           <Route path="/user/agents" element={<AgentsPage />} />
           <Route path="/user/products" element={<ProductsPage />} />
+          <Route path="/user/profile" element={<ProfilePage />} />
         </Route>
       )
     } else if (state.role === "ROLE_AGENT") {
@@ -129,6 +131,7 @@ function App() {
           <Route path="/user/ticket/:ticketId" element={<TicketPage />} />
           <Route path="/user/nearDeadline" element={<NearDeadlinePage />} />
           <Route path="/user/passedDeadline" element={<PassedDeadlinePage />} />
+          <Route path="/user/profile" element={<ProfilePage />} />
         </Route>
       )
     } else {
